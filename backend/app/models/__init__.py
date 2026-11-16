@@ -1,0 +1,19 @@
+from app.models.entities import (
+    Company,
+    User,
+    Product,
+    ProductionLine,
+    ProductionBatch,
+    QualityParameter,
+    QualityInspection,
+    InspectionMeasurement,
+    BatchQRCode,
+    AIPrediction,
+    Warehouse,
+    InventoryMovement,
+    Customer,
+    DistributionOrder,
+    Delivery,
+    AuditLog,
+    Notification
+)
