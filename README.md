@@ -1,5 +1,5 @@
-# BeverageTrack AI
-## AI-Powered Tracking Information System for Beverage Bottling Companies in Freetown, Sierra Leone
+# N-AI-POWERED-TRACKING
+## BeverageTrack AI — AI-Powered Tracking Information System for Beverage Bottling Companies in Freetown, Sierra Leone
 
 > **Project Title:** *Design and Development of an AI-Powered Tracking Information System for Enhancing Quality Control and Distribution in Beverage Bottling Companies in Freetown, Sierra Leone.*
 
