@@ -84,7 +84,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
           <div className="mt-3">
             <div className="text-2xl font-extrabold text-slate-900">
-              {kpis.bottles_produced.toLocaleString()}
+              {Number(kpis.bottles_produced || 0).toLocaleString()}
             </div>
             <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
               <span className="text-emerald-600 font-bold flex items-center">
@@ -125,7 +125,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
           <div className="mt-3">
             <div className="text-2xl font-extrabold text-slate-900">
-              {kpis.available_stock.toLocaleString()}
+              {Number(kpis.available_stock || 0).toLocaleString()}
             </div>
             <p className="text-xs text-slate-500 mt-1 font-medium">
               Across Kissy & Lumley Warehouses
@@ -294,7 +294,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     className="bg-sky-500 h-full rounded-full transition-all duration-500"
                   ></div>
                 </div>
-                <span className="w-16 font-bold text-slate-800 text-right">{t.produced.toLocaleString()} btl</span>
+                <span className="w-16 font-bold text-slate-800 text-right">{Number(t.produced || 0).toLocaleString()} btl</span>
                 <span className="w-14 font-extrabold text-emerald-600 text-right bg-emerald-50 px-1.5 py-0.5 rounded">
                   {t.pass_rate}%
                 </span>
@@ -318,7 +318,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <div key={i} className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
                   <div className="flex justify-between items-center text-xs mb-1.5">
                     <span className="font-semibold text-slate-800">{c.name}</span>
-                    <span className="font-extrabold text-slate-900">{c.volume.toLocaleString()} ({c.pct}%)</span>
+                    <span className="font-extrabold text-slate-900">{Number(c.volume || 0).toLocaleString()} ({c.pct}%)</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
                     <div className={`h-full ${c.color} rounded-full`} style={{ width: `${c.pct}%` }}></div>
@@ -399,7 +399,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <tr key={b.id} className="hover:bg-slate-50/80 transition-colors">
                     <td className="px-5 py-3.5 font-bold text-slate-900 font-mono">{b.batch_number}</td>
                     <td className="px-5 py-3.5 font-semibold text-slate-800">{b.product_name}</td>
-                    <td className="px-5 py-3.5 font-medium">{b.quantity.toLocaleString()} bottles</td>
+                    <td className="px-5 py-3.5 font-medium">{Number(b.quantity || b.quantity_produced || b.produced_quantity || 0).toLocaleString()} bottles</td>
                     <td className="px-5 py-3.5 text-slate-500">{b.date}</td>
                     <td className="px-5 py-3.5">{statusBadge}</td>
                     <td className="px-5 py-3.5 text-right space-x-2">

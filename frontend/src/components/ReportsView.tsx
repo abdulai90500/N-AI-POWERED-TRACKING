@@ -36,7 +36,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
 
   const handleExportCSV = () => {
     const headers = "BatchNumber,Product,Quantity,ProductionDate,Status\n";
-    const rows = batches.map(b => `${b.batch_number},${b.product_name},${b.quantity_produced},${b.production_date},${b.status}`).join("\n");
+    const rows = batches.map(b => `${b.batch_number},${b.product_name},${b.quantity_produced || b.produced_quantity || 0},${b.production_date || '2026-11-15'},${b.status}`).join("\n");
     const blob = new Blob([headers + rows], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -133,7 +133,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
           <div className="p-3 bg-slate-50 rounded-lg">
             <span className="text-slate-500 font-medium">Bottles Produced:</span>
-            <p className="text-base font-bold text-slate-900 mt-0.5">{kpis.bottles_produced.toLocaleString()}</p>
+            <p className="text-base font-bold text-slate-900 mt-0.5">{Number(kpis.bottles_produced || 0).toLocaleString()}</p>
           </div>
           <div className="p-3 bg-slate-50 rounded-lg">
             <span className="text-slate-500 font-medium">Quality Compliance Rate:</span>
@@ -141,7 +141,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
           </div>
           <div className="p-3 bg-slate-50 rounded-lg">
             <span className="text-slate-500 font-medium">Available Warehouse Stock:</span>
-            <p className="text-base font-bold text-sky-600 mt-0.5">{kpis.available_stock.toLocaleString()}</p>
+            <p className="text-base font-bold text-sky-600 mt-0.5">{Number(kpis.available_stock || 0).toLocaleString()}</p>
           </div>
           <div className="p-3 bg-slate-50 rounded-lg">
             <span className="text-slate-500 font-medium">Distribution Orders:</span>

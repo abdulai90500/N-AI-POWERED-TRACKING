@@ -90,7 +90,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                 <div className="mt-4">
                   <div className="flex justify-between text-xs mb-1 font-semibold">
                     <span className="text-slate-600">Current Occupancy</span>
-                    <span className="text-slate-900">{current.toLocaleString()} / {cap.toLocaleString()} units</span>
+                    <span className="text-slate-900">{Number(current || 0).toLocaleString()} / {Number(cap || 0).toLocaleString()} units</span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                     <div
@@ -131,7 +131,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
           <div>
             <h2 className="text-sm font-bold text-slate-900">Finished Goods Stock by Batch</h2>
             <p className="text-xs text-slate-500">
-              Total available in warehouses: <strong>{totalStock.toLocaleString()} bottles</strong>
+              Total available in warehouses: <strong>{Number(totalStock || 0).toLocaleString()} bottles</strong>
             </p>
           </div>
           <button
@@ -165,9 +165,9 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                   </td>
                   <td className="px-5 py-3.5">
                     <span className="font-extrabold text-slate-900 text-sm">
-                      {b.available_stock.toLocaleString()}
+                      {Number(b.available_stock || 0).toLocaleString()}
                     </span>
-                    <span className="text-[11px] text-slate-400 font-normal"> / {b.quantity_produced.toLocaleString()}</span>
+                    <span className="text-[11px] text-slate-400 font-normal"> / {Number(b.quantity_produced || b.produced_quantity || 0).toLocaleString()}</span>
                   </td>
                   <td className="px-5 py-3.5 text-slate-500">{b.production_date}</td>
                   <td className="px-5 py-3.5 text-slate-500">{b.expiry_date || 'Standard +1yr'}</td>
@@ -218,7 +218,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
                     </td>
                     <td className="px-5 py-3.5 font-bold font-mono text-slate-900">{m.batch_number}</td>
                     <td className="px-5 py-3.5 font-extrabold text-slate-900">
-                      {isStockIn ? '+' : '-'}{m.quantity.toLocaleString()}
+                      {isStockIn ? '+' : '-'}{Number(m.quantity || 0).toLocaleString()}
                     </td>
                     <td className="px-5 py-3.5 text-slate-700">{m.warehouse_name || 'Kissy Central'}</td>
                     <td className="px-5 py-3.5 font-mono text-[11px] text-slate-500">{m.reference_id || 'N/A'}</td>

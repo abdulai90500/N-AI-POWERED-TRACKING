@@ -182,15 +182,35 @@ class ApiService {
       const totalBatches = this.memoryStore.batches.length;
       const approvedBatches = this.memoryStore.batches.filter(b => b.status === 'approved').length;
       const passRate = totalBatches > 0 ? (approvedBatches / totalBatches) * 100 : 96.4;
+      const totalProduced = this.memoryStore.batches.reduce((sum, b) => sum + (Number(b.quantity_produced || b.produced_quantity || 10000)), 0);
+      const totalStock = this.memoryStore.batches.reduce((sum, b) => sum + (Number(b.available_stock || 12000)), 0);
+      const anomalies = this.memoryStore.predictions.filter(p => p.anomaly_detected).length || 1;
+
       return {
         today_production: 74620,
         target_production: 75000,
         production_efficiency: 99.4,
         quality_pass_rate: Number(passRate.toFixed(1)),
         quarantined_batches: this.memoryStore.batches.filter(b => b.status === 'quarantined').length,
-        total_inventory_cases: 60700,
+        total_inventory_cases: totalStock,
         active_deliveries: this.memoryStore.deliveries.filter(d => d.status === 'in_transit').length,
-        ai_risk_alerts: this.memoryStore.predictions.filter(p => p.anomaly_detected).length,
+        ai_risk_alerts: anomalies,
+        kpis: {
+          bottles_produced: totalProduced || 74620,
+          quality_pass_rate: Number(passRate.toFixed(1)),
+          available_stock: totalStock || 60700,
+          deliveries_recorded: this.memoryStore.deliveries.length,
+          ai_anomalies_flagged: anomalies,
+          active_in_transit: this.memoryStore.deliveries.filter(d => d.status === 'in_transit').length || 1,
+        },
+        recent_batches: this.memoryStore.batches.slice(0, 5).map(b => ({
+          id: b.id,
+          batch_number: b.batch_number,
+          product_name: b.product_name,
+          quantity: Number(b.quantity_produced || b.produced_quantity || 10000),
+          date: b.production_date || '2026-11-17',
+          status: b.status || 'approved'
+        }))
       } as unknown as T;
     }
 
@@ -364,8 +384,19 @@ class ApiService {
     if (endpoint === '/inventory/warehouses') return INITIAL_WAREHOUSES as unknown as T;
     if (endpoint === '/inventory/summary') {
       return {
+        total_bottles_in_stock: 60700,
         total_units: 60700,
         warehouses: INITIAL_WAREHOUSES,
+        inventory: this.memoryStore.batches.map(b => ({
+          batch_id: b.id,
+          batch_number: b.batch_number,
+          product_name: b.product_name,
+          product_category: b.product_category || 'Bottled Beverage',
+          available_stock: b.available_stock || 15000,
+          quantity_produced: b.quantity_produced || b.produced_quantity || 20000,
+          production_date: b.production_date || '2026-11-15',
+          expiry_date: b.expiry_date || '2027-11-15'
+        })),
         category_breakdown: [
           { category: 'Bottled Water', units: 36300 },
           { category: 'Malt Beverage', units: 17200 },

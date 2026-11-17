@@ -29,7 +29,11 @@ import {
   ChevronDown,
   UserCheck,
   Zap,
-  Globe
+  Globe,
+  Eye,
+  EyeOff,
+  KeyRound,
+  ScanLine
 } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -65,6 +69,9 @@ export const App: React.FC = () => {
   const [password, setPassword] = useState('Password123!');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [roleSelection, setRoleSelection] = useState<string>('admin@sierrasprings.sl');
+  const [loginTab, setLoginTab] = useState<'credentials' | 'badge_scan'>('credentials');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [scannedBadgeStaff, setScannedBadgeStaff] = useState<string | null>(null);
 
   // Initial Auth Check
   useEffect(() => {
@@ -269,6 +276,7 @@ export const App: React.FC = () => {
           <MobileQRScanner
             onClose={() => setShowMobileScanner(false)}
             onAdminLogin={() => handleQuickLogin('admin@sierrasprings.sl')}
+            onStaffLogin={(email) => handleQuickLogin(email)}
           />
         </div>
       );
@@ -278,7 +286,7 @@ export const App: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-sky-950 flex flex-col justify-center items-center p-4 sm:p-6 lg:p-10">
         <div className="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
-          {/* Left Column: SaaS Login Form with Admin Pre-assigned */}
+          {/* Left Column: Dual-Mode SaaS Login (Enter Credentials or Scan Badge) */}
           <div className="lg:col-span-5 bg-white rounded-3xl shadow-2xl p-6 sm:p-8 border border-slate-200 flex flex-col justify-between">
             <div>
               {/* Header Badge: Sierra Leone National Colors */}
@@ -296,21 +304,50 @@ export const App: React.FC = () => {
                   type="button"
                   onClick={() => setShowMobileScanner(true)}
                   className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold hover:bg-sky-100 transition shadow-sm"
+                  title="Open bottle traceability camera"
                 >
                   <Camera className="w-3.5 h-3.5 text-sky-600" />
-                  <span>Mobile Scanner</span>
+                  <span>Consumer Scan</span>
                 </button>
               </div>
 
               {/* Title & Brand */}
-              <div className="text-left mb-6">
-                <div className="w-12 h-12 bg-gradient-to-tr from-sky-500 to-brand-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-sky-600/30 mb-3">
+              <div className="text-left mb-4">
+                <div className="w-12 h-12 bg-gradient-to-tr from-sky-500 to-brand-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-sky-600/30 mb-2.5">
                   <Factory className="w-7 h-7" />
                 </div>
                 <h1 className="text-2xl font-black text-slate-900 tracking-tight">BeverageTrack AI</h1>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  Quality Assurance & Distribution Information System • Freetown Bottling Facility
+                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                  Quality Assurance & Distribution Information System • Kissy Bottling Facility
                 </p>
+              </div>
+
+              {/* Login Mode Switcher Tabs */}
+              <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 rounded-2xl border border-slate-200 mb-4">
+                <button
+                  type="button"
+                  onClick={() => setLoginTab('credentials')}
+                  className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                    loginTab === 'credentials'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  <KeyRound className="w-3.5 h-3.5 text-sky-600" />
+                  <span>Enter Credentials</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLoginTab('badge_scan')}
+                  className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                    loginTab === 'badge_scan'
+                      ? 'bg-white text-slate-900 shadow-sm'
+                      : 'text-slate-500 hover:text-slate-900'
+                  }`}
+                >
+                  <ScanLine className="w-3.5 h-3.5 text-sky-600" />
+                  <span>Scan Badge to Login</span>
+                </button>
               </div>
 
               {loginError && (
@@ -320,100 +357,155 @@ export const App: React.FC = () => {
                 </div>
               )}
 
-              {/* Primary Pre-Assigned Administrator Profile Card */}
-              <div className="mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-200 text-left">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-bold text-sky-800 uppercase tracking-wider flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
-                    Assigned Account
-                  </span>
-                  <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-600 text-white shadow-sm">
-                    Admin
-                  </span>
-                </div>
-                <p className="text-xs font-black text-slate-900">Mariama Sesay</p>
-                <p className="text-[11px] text-slate-500 font-medium">Company Administrator • Sierra Springs & Beverages Ltd</p>
-              </div>
-
-              {/* Login Form */}
-              <form onSubmit={handleLogin} className="space-y-3.5">
+              {/* MODE 1: Standard Editable Credentials with Quick Autofill */}
+              {loginTab === 'credentials' && (
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Company Staff Email</label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        setRoleSelection(e.target.value);
-                      }}
-                      className="w-full text-xs pl-9 pr-3 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 font-medium"
-                      required
-                    />
+                  {/* Quick Autofill Buttons for Testing */}
+                  <div className="mb-3 text-left">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                      1-Click Autofill Credentials:
+                    </p>
+                    <div className="grid grid-cols-3 gap-1">
+                      {[
+                        { label: '👑 Admin', email: 'admin@sierrasprings.sl' },
+                        { label: '🔬 QC Lead', email: 'quality@sierrasprings.sl' },
+                        { label: '🏭 Production', email: 'production@sierrasprings.sl' },
+                        { label: '📦 Warehouse', email: 'warehouse@sierrasprings.sl' },
+                        { label: '🚚 Fleet Driver', email: 'distribution@sierrasprings.sl' },
+                        { label: '🌐 Super Admin', email: 'superadmin@beveragetrack.sl' },
+                      ].map((item) => (
+                        <button
+                          key={item.email}
+                          type="button"
+                          onClick={() => {
+                            setEmail(item.email);
+                            setPassword('Password123!');
+                          }}
+                          className={`p-1.5 text-[11px] font-bold rounded-lg border text-left truncate transition ${
+                            email === item.email
+                              ? 'bg-sky-50 border-sky-300 text-sky-800 ring-1 ring-sky-300'
+                              : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Credentials Form */}
+                  <form onSubmit={handleLogin} className="space-y-3">
+                    <div className="text-left">
+                      <label className="block text-xs font-bold text-slate-700 mb-1">Staff Work Email</label>
+                      <div className="relative">
+                        <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="name@sierrasprings.sl"
+                          className="w-full text-xs pl-9 pr-3 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 font-semibold"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="text-left">
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="text-xs font-bold text-slate-700">Security Password</label>
+                        <span className="text-[10px] text-slate-400">Default: Password123!</span>
+                      </div>
+                      <div className="relative">
+                        <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="••••••••••••"
+                          className="w-full text-xs pl-9 pr-10 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 font-mono font-bold"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold rounded-xl shadow-lg shadow-sky-600/30 transition flex items-center justify-center gap-2 mt-2"
+                    >
+                      <UserCheck className="w-4 h-4" />
+                      <span>Authenticate & Enter System</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </form>
+                </div>
+              )}
+
+              {/* MODE 2: Scan Badge / QR Code Login */}
+              {loginTab === 'badge_scan' && (
+                <div className="space-y-3 text-left">
+                  {/* Badge Scanner Viewfinder */}
+                  <div className="relative bg-slate-950 rounded-2xl p-4 text-center overflow-hidden aspect-[16/9] flex flex-col items-center justify-center border border-slate-800">
+                    <div className="relative w-28 h-28 border-2 border-dashed border-sky-400/80 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(2,132,199,0.3)]">
+                      <QrCode className="w-12 h-12 text-sky-400 animate-pulse" />
+                      <div className="absolute inset-x-0 h-0.5 bg-sky-400 shadow-[0_0_10px_#38bdf8] animate-bounce"></div>
+                    </div>
+
+                    <p className="text-[11px] font-mono font-bold text-sky-300 mt-2">
+                      {scannedBadgeStaff ? `Authenticating: ${scannedBadgeStaff}` : 'HOLD STAFF BADGE UP TO SCANNER'}
+                    </p>
+                  </div>
+
+                  {/* 1-Click Tap to Scan Staff Badge */}
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                      Tap Any Staff ID Card to Scan & Login:
+                    </p>
+                    <div className="space-y-1.5">
+                      {[
+                        { name: 'Mariama Sesay', role: 'Company Administrator', email: 'admin@sierrasprings.sl', badge: 'STAFF-ADMIN-001' },
+                        { name: 'Fatmata Bangura', role: 'Quality Control Officer', email: 'quality@sierrasprings.sl', badge: 'STAFF-QC-002' },
+                        { name: 'Ibrahim Kamara', role: 'Production Manager', email: 'production@sierrasprings.sl', badge: 'STAFF-PROD-003' },
+                        { name: 'Mohamed Turay', role: 'Warehouse Manager', email: 'warehouse@sierrasprings.sl', badge: 'STAFF-WH-004' },
+                        { name: 'Alhaji Conteh', role: 'Fleet Distribution Officer', email: 'distribution@sierrasprings.sl', badge: 'STAFF-DIST-005' },
+                      ].map((staff) => (
+                        <button
+                          key={staff.email}
+                          type="button"
+                          onClick={() => {
+                            setScannedBadgeStaff(staff.name);
+                            setTimeout(() => {
+                              handleQuickLogin(staff.email);
+                            }, 300);
+                          }}
+                          className="w-full p-2 rounded-xl bg-slate-50 hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-left transition flex items-center justify-between group"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-xs">
+                              {staff.name.split(' ').map(n => n[0]).join('')}
+                            </div>
+                            <div>
+                              <p className="text-xs font-bold text-slate-900 group-hover:text-sky-700 leading-tight">
+                                {staff.name}
+                              </p>
+                              <p className="text-[10px] text-slate-500">{staff.role}</p>
+                            </div>
+                          </div>
+                          <span className="font-mono text-[10px] font-bold text-sky-600 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded">
+                            {staff.badge}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Password</label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full text-xs pl-9 pr-3 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 font-medium"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Primary Sign In Button */}
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white text-xs font-extrabold rounded-xl shadow-lg shadow-sky-600/30 transition flex items-center justify-center gap-2"
-                >
-                  <UserCheck className="w-4 h-4" />
-                  <span>Sign In as System Administrator</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </form>
-
-              {/* Mobile QR Scanner Action Button */}
-              <div className="mt-3">
-                <button
-                  type="button"
-                  onClick={() => setShowMobileScanner(true)}
-                  className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow transition flex items-center justify-center gap-2"
-                >
-                  <Camera className="w-4 h-4 text-sky-400" />
-                  <span>📱 Launch Mobile Bottle QR Scanner</span>
-                </button>
-              </div>
-
-              {/* Clean Role Switcher Dropdown (No Cluttered Accounts List) */}
-              <div className="mt-4 pt-3 border-t border-slate-100 text-left">
-                <label className="block text-[11px] font-bold text-slate-500 mb-1.5">
-                  Switch Operational Role for Testing:
-                </label>
-                <select
-                  value={roleSelection}
-                  onChange={(e) => {
-                    const selected = e.target.value;
-                    setRoleSelection(selected);
-                    setEmail(selected);
-                  }}
-                  className="w-full text-xs font-semibold bg-slate-50 border border-slate-300 rounded-xl p-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
-                >
-                  <option value="admin@sierrasprings.sl">Mariama Sesay — Company Administrator</option>
-                  <option value="quality@sierrasprings.sl">Fatmata Bangura — Quality Control Officer</option>
-                  <option value="production@sierrasprings.sl">Ibrahim Kamara — Production Manager</option>
-                  <option value="warehouse@sierrasprings.sl">Mohamed Turay — Warehouse Manager</option>
-                  <option value="distribution@sierrasprings.sl">Alhaji Conteh — Distribution Officer</option>
-                  <option value="superadmin@beveragetrack.sl">Dr. Alpha Bah — Super Administrator</option>
-                  <option value="admin@lionsoftdrinks.sl">Tenant 2 — Lion Soft Drinks Co. (Independent Tenant)</option>
-                </select>
-              </div>
+              )}
             </div>
 
             {/* Bottom Footer Note */}

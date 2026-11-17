@@ -68,8 +68,8 @@ export const ProductionView: React.FC<ProductionViewProps> = ({
     return matchesSearch && matchesStatus;
   });
 
-  const totalBottles = batches.reduce((acc, b) => acc + (b.quantity_produced || 0), 0);
-  const totalRejected = batches.reduce((acc, b) => acc + (b.quantity_rejected || 0), 0);
+  const totalBottles = batches.reduce((acc, b) => acc + Number(b.quantity_produced || b.produced_quantity || 0), 0);
+  const totalRejected = batches.reduce((acc, b) => acc + Number(b.quantity_rejected || 0), 0);
   const rejectionRate = totalBottles > 0 ? ((totalRejected / totalBottles) * 100).toFixed(2) : '0.00';
 
   return (
@@ -78,7 +78,7 @@ export const ProductionView: React.FC<ProductionViewProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
           <p className="text-xs font-bold text-slate-500 uppercase">Total Production Output</p>
-          <p className="text-2xl font-extrabold text-slate-900 mt-1">{totalBottles.toLocaleString()} <span className="text-xs font-normal text-slate-500">bottles</span></p>
+          <p className="text-2xl font-extrabold text-slate-900 mt-1">{Number(totalBottles || 0).toLocaleString()} <span className="text-xs font-normal text-slate-500">bottles</span></p>
           <p className="text-[11px] text-slate-500 mt-1">Recorded in current production cycle</p>
         </div>
         <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
@@ -190,9 +190,9 @@ export const ProductionView: React.FC<ProductionViewProps> = ({
                     </td>
                     <td className="px-5 py-3.5 font-medium text-slate-700">{b.line_name || 'Line 01'}</td>
                     <td className="px-5 py-3.5">
-                      <span className="font-bold text-slate-900">{b.quantity_produced.toLocaleString()}</span>
+                      <span className="font-bold text-slate-900">{Number(b.quantity_produced || b.produced_quantity || 0).toLocaleString()}</span>
                       <span className="text-slate-400"> / </span>
-                      <span className="text-rose-600 font-semibold">{b.quantity_rejected} rej</span>
+                      <span className="text-rose-600 font-semibold">{b.quantity_rejected ?? 0} rej</span>
                     </td>
                     <td className="px-5 py-3.5 text-slate-500">{b.production_date}</td>
                     <td className="px-5 py-3.5">{badge}</td>

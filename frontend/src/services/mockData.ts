@@ -1,5 +1,5 @@
 // In-browser mock data and state engine for BeverageTrack AI
-// Enables full interactive demo capabilities on Vercel or offline environments
+// Fully normalized fields matching both REST APIs and UI view components
 
 export const INITIAL_PRODUCTS = [
   {
@@ -80,7 +80,7 @@ export const INITIAL_PRODUCTS = [
     volume_ml: 500,
     shelf_life_days: 270,
     min_stock_level: 6000,
-    current_stock: 4200, // Trigger low stock warning
+    current_stock: 4200,
     target_ph: 3.1,
     ph_min: 2.8,
     ph_max: 3.4,
@@ -142,14 +142,20 @@ export const INITIAL_BATCHES = [
     batch_number: "BTL-2026-001",
     product_id: "prod-001",
     product_name: "Sierra Pure Water 500ml",
+    product_category: "Bottled Water",
     product_sku: "SPW-500",
     production_line_id: "line-001",
     production_line_name: "Line 1 - High-Speed Bottling (PET)",
+    line_name: "Line 1 - High-Speed Bottling (PET)",
     planned_quantity: 25000,
     produced_quantity: 24850,
+    quantity_produced: 24850,
+    quantity_rejected: 35,
+    available_stock: 17650,
     status: "approved",
+    production_date: "2026-11-15",
     manufacturing_date: "2026-11-15T08:00:00Z",
-    expiry_date: "2027-11-15T08:00:00Z",
+    expiry_date: "2027-11-15",
     qr_token: "track_btl_2026_001_sierra_springs",
     notes: "High efficiency run, standard mineral equilibrium maintained.",
     ai_risk_level: "low",
@@ -160,14 +166,20 @@ export const INITIAL_BATCHES = [
     batch_number: "BTL-2026-002",
     product_id: "prod-003",
     product_name: "Lion Ginger Malt 330ml",
+    product_category: "Malt Beverage",
     product_sku: "LGM-330",
     production_line_id: "line-002",
     production_line_name: "Line 2 - Glass & Canning Line",
+    line_name: "Line 2 - Glass & Canning Line",
     planned_quantity: 18000,
     produced_quantity: 17920,
+    quantity_produced: 17920,
+    quantity_rejected: 28,
+    available_stock: 15400,
     status: "approved",
+    production_date: "2026-11-16",
     manufacturing_date: "2026-11-16T09:30:00Z",
-    expiry_date: "2027-05-16T09:30:00Z",
+    expiry_date: "2027-05-16",
     qr_token: "track_btl_2026_002_lion_malt",
     notes: "Glass bottling with crown seal torque calibration verified.",
     ai_risk_level: "low",
@@ -178,14 +190,20 @@ export const INITIAL_BATCHES = [
     batch_number: "BTL-2026-003",
     product_id: "prod-004",
     product_name: "Salone Cola 500ml",
+    product_category: "Carbonated Soft Drink",
     product_sku: "SCL-500",
     production_line_id: "line-001",
     production_line_name: "Line 1 - High-Speed Bottling (PET)",
+    line_name: "Line 1 - High-Speed Bottling (PET)",
     planned_quantity: 20000,
     produced_quantity: 19800,
+    quantity_produced: 19800,
+    quantity_rejected: 120,
+    available_stock: 0,
     status: "quarantined",
+    production_date: "2026-11-16",
     manufacturing_date: "2026-11-16T14:00:00Z",
-    expiry_date: "2027-08-16T14:00:00Z",
+    expiry_date: "2027-08-16",
     qr_token: "track_btl_2026_003_salone_cola",
     notes: "AI Anomaly detected: pH 8.42 alkaline drift vs standard 3.10. Quarantined in Kissy isolation bay.",
     ai_risk_level: "high",
@@ -196,14 +214,20 @@ export const INITIAL_BATCHES = [
     batch_number: "BTL-2026-004",
     product_id: "prod-002",
     product_name: "Sierra Pure Water 1500ml",
+    product_category: "Bottled Water",
     product_sku: "SPW-1500",
     production_line_id: "line-001",
     production_line_name: "Line 1 - High-Speed Bottling (PET)",
+    line_name: "Line 1 - High-Speed Bottling (PET)",
     planned_quantity: 12000,
     produced_quantity: 11950,
+    quantity_produced: 11950,
+    quantity_rejected: 18,
+    available_stock: 11800,
     status: "in_production",
+    production_date: "2026-11-17",
     manufacturing_date: "2026-11-17T07:30:00Z",
-    expiry_date: "2027-11-17T07:30:00Z",
+    expiry_date: "2027-11-17",
     qr_token: "track_btl_2026_004_water_1500",
     notes: "Mid-morning shift run currently in post-capping visual inspection.",
     ai_risk_level: "low",
@@ -219,16 +243,19 @@ export const INITIAL_INSPECTIONS = [
     product_name: "Sierra Pure Water 500ml",
     inspector_name: "Fatmata Bangura (QC Officer)",
     inspection_type: "Full Laboratory Release Protocol",
+    inspection_status: "passed",
     status: "passed",
     sample_size: 24,
+    inspected_at: "2026-11-15T11:45:00Z",
     created_at: "2026-11-15T11:45:00Z",
+    remarks: "Complies fully with Sierra Leone Standards Bureau (SLSB) drinking water quality benchmark.",
+    notes: "Complies fully with Sierra Leone Standards Bureau (SLSB) drinking water quality benchmark.",
     measurements: [
-      { parameter: "pH Level", value: 6.95, unit: "pH", status: "passed", min_spec: 6.5, max_spec: 7.5 },
-      { parameter: "Filling Volume", value: 502.4, unit: "ml", status: "passed", min_spec: 495.0, max_spec: 510.0 },
-      { parameter: "Cap Seal Torque", value: 18.2, unit: "in-lb", status: "passed", min_spec: 14.0, max_spec: 24.0 },
-      { parameter: "Visual Clarity & Seal", value: 0, unit: "defects", status: "passed", min_spec: 0, max_spec: 0 }
-    ],
-    notes: "Complies fully with Sierra Leone Standards Bureau (SLSB) drinking water quality benchmark."
+      { parameter_name: "pH Level", parameter: "pH Level", measured_value: 6.95, value: 6.95, unit: "pH", status: "passed", result: "in_spec", min_spec: 6.5, max_spec: 7.5 },
+      { parameter_name: "Filling Volume", parameter: "Filling Volume", measured_value: 502.4, value: 502.4, unit: "ml", status: "passed", result: "in_spec", min_spec: 495.0, max_spec: 510.0 },
+      { parameter_name: "Cap Seal Torque", parameter: "Cap Seal Torque", measured_value: 18.2, value: 18.2, unit: "in-lb", status: "passed", result: "in_spec", min_spec: 14.0, max_spec: 24.0 },
+      { parameter_name: "Visual Clarity & Seal", parameter: "Visual Clarity & Seal", measured_value: 0, value: 0, unit: "defects", status: "passed", result: "in_spec", min_spec: 0, max_spec: 0 }
+    ]
   },
   {
     id: "ins-002",
@@ -237,16 +264,19 @@ export const INITIAL_INSPECTIONS = [
     product_name: "Lion Ginger Malt 330ml",
     inspector_name: "Fatmata Bangura (QC Officer)",
     inspection_type: "Fermentation & Carbonation Assay",
+    inspection_status: "passed",
     status: "passed",
     sample_size: 24,
+    inspected_at: "2026-11-16T12:30:00Z",
     created_at: "2026-11-16T12:30:00Z",
+    remarks: "Excellent carbonation retention and spice profile. Approved for Kissy central dispatch.",
+    notes: "Excellent carbonation retention and spice profile. Approved for Kissy central dispatch.",
     measurements: [
-      { parameter: "pH Level", value: 4.18, unit: "pH", status: "passed", min_spec: 3.8, max_spec: 4.5 },
-      { parameter: "Brix Sugar Content", value: 11.4, unit: "°Bx", status: "passed", min_spec: 10.8, max_spec: 12.2 },
-      { parameter: "Filling Volume", value: 331.0, unit: "ml", status: "passed", min_spec: 325.0, max_spec: 338.0 },
-      { parameter: "Crown Cork Pressure", value: 21.5, unit: "in-lb", status: "passed", min_spec: 16.0, max_spec: 28.0 }
-    ],
-    notes: "Excellent carbonation retention and spice profile. Approved for Kissy central dispatch."
+      { parameter_name: "pH Level", parameter: "pH Level", measured_value: 4.18, value: 4.18, unit: "pH", status: "passed", result: "in_spec", min_spec: 3.8, max_spec: 4.5 },
+      { parameter_name: "Brix Sugar Content", parameter: "Brix Sugar Content", measured_value: 11.4, value: 11.4, unit: "°Bx", status: "passed", result: "in_spec", min_spec: 10.8, max_spec: 12.2 },
+      { parameter_name: "Filling Volume", parameter: "Filling Volume", measured_value: 331.0, value: 331.0, unit: "ml", status: "passed", result: "in_spec", min_spec: 325.0, max_spec: 338.0 },
+      { parameter_name: "Crown Cork Pressure", parameter: "Crown Cork Pressure", measured_value: 21.5, value: 21.5, unit: "in-lb", status: "passed", result: "in_spec", min_spec: 16.0, max_spec: 28.0 }
+    ]
   },
   {
     id: "ins-003",
@@ -255,16 +285,19 @@ export const INITIAL_INSPECTIONS = [
     product_name: "Salone Cola 500ml",
     inspector_name: "Fatmata Bangura (QC Officer)",
     inspection_type: "Syrup & Carbonation Verification",
+    inspection_status: "failed",
     status: "failed",
     sample_size: 24,
+    inspected_at: "2026-11-16T15:20:00Z",
     created_at: "2026-11-16T15:20:00Z",
+    remarks: "CRITICAL ALERT: pH 8.42 detected. Machine CIP rinse water suspected in line. Automatic quarantine executed.",
+    notes: "CRITICAL ALERT: pH 8.42 detected. Machine CIP rinse water suspected in line. Automatic quarantine executed.",
     measurements: [
-      { parameter: "pH Level", value: 8.42, unit: "pH", status: "failed", min_spec: 2.8, max_spec: 3.4 },
-      { parameter: "Brix Sugar Content", value: 7.1, unit: "°Bx", status: "failed", min_spec: 9.8, max_spec: 11.2 },
-      { parameter: "Filling Volume", value: 491.5, unit: "ml", status: "failed", min_spec: 495.0, max_spec: 510.0 },
-      { parameter: "Cap Seal Torque", value: 12.1, unit: "in-lb", status: "failed", min_spec: 14.0, max_spec: 24.0 }
-    ],
-    notes: "CRITICAL ALERT: pH 8.42 detected. Highly alkaline reading for acidic cola formula. Machine CIP rinse water suspected in line. Automatic quarantine executed."
+      { parameter_name: "pH Level", parameter: "pH Level", measured_value: 8.42, value: 8.42, unit: "pH", status: "failed", result: "out_of_spec", min_spec: 2.8, max_spec: 3.4 },
+      { parameter_name: "Brix Sugar Content", parameter: "Brix Sugar Content", measured_value: 7.1, value: 7.1, unit: "°Bx", status: "failed", result: "out_of_spec", min_spec: 9.8, max_spec: 11.2 },
+      { parameter_name: "Filling Volume", parameter: "Filling Volume", measured_value: 491.5, value: 491.5, unit: "ml", status: "failed", result: "out_of_spec", min_spec: 495.0, max_spec: 510.0 },
+      { parameter_name: "Cap Seal Torque", parameter: "Cap Seal Torque", measured_value: 12.1, value: 12.1, unit: "in-lb", status: "failed", result: "out_of_spec", min_spec: 14.0, max_spec: 24.0 }
+    ]
   }
 ];
 
@@ -308,18 +341,24 @@ export const INITIAL_WAREHOUSES = [
     id: "wh-001",
     name: "Kissy Central Distribution Warehouse",
     location: "14 Kissy Industrial Estate, Kissy, Freetown",
+    address: "14 Kissy Industrial Estate, Kissy, Freetown",
     code: "WH-KSY-01",
     total_capacity: 250000,
+    capacity_units: 250000,
     current_occupancy: 42500,
+    current_stock: 42500,
     status: "active"
   },
   {
     id: "wh-002",
     name: "Lumley Depot & Retail Hub",
     location: "28 Lumley Beach Road, Lumley, Freetown",
+    address: "28 Lumley Beach Road, Lumley, Freetown",
     code: "WH-LMY-02",
     total_capacity: 100000,
+    capacity_units: 100000,
     current_occupancy: 18200,
+    current_stock: 18200,
     status: "active"
   }
 ];
@@ -371,8 +410,12 @@ export const INITIAL_ORDERS = [
     customer_name: "Choithram Supermarket",
     order_date: "2026-11-16T10:00:00Z",
     status: "dispatched",
+    batch_number: "BTL-2026-001",
+    quantity_ordered: 7200,
+    quantity_delivered: 7200,
     total_cases: 400,
     destination: "15 Rawdon Street, Central Freetown",
+    destination_address: "15 Rawdon Street, Central Freetown",
     items: [
       { product_name: "Sierra Pure Water 500ml", quantity: 300 },
       { product_name: "Lion Ginger Malt 330ml", quantity: 100 }
@@ -384,9 +427,13 @@ export const INITIAL_ORDERS = [
     customer_id: "cust-003",
     customer_name: "Crown Bakery & Mini Mart",
     order_date: "2026-11-17T08:30:00Z",
-    status: "pending_dispatch",
+    status: "pending",
+    batch_number: "BTL-2026-002",
+    quantity_ordered: 3600,
+    quantity_delivered: 0,
     total_cases: 250,
     destination: "88 Wilkinson Road, Freetown",
+    destination_address: "88 Wilkinson Road, Freetown",
     items: [
       { product_name: "Sierra Pure Water 500ml", quantity: 150 },
       { product_name: "Lion Ginger Malt 330ml", quantity: 100 }
@@ -403,10 +450,13 @@ export const INITIAL_DELIVERIES = [
     customer_name: "Choithram Supermarket",
     destination: "15 Rawdon Street, Central Freetown",
     vehicle_reg: "SL-AA-402 (Toyota Dyna)",
+    vehicle_number: "SL-AA-402 (Toyota Dyna)",
     driver_name: "Samuel Koroma",
     driver_phone: "+232 76 998877",
     dispatch_time: "2026-11-16T14:30:00Z",
+    dispatched_at: "2026-11-16T14:30:00Z",
     status: "in_transit",
+    delivery_status: "in_transit",
     estimated_arrival: "2026-11-16T16:15:00Z",
     notes: "Transit through Kissy By-Pass to Rawdon St CBD."
   },
@@ -418,10 +468,13 @@ export const INITIAL_DELIVERIES = [
     customer_name: "Crown Bakery & Mini Mart",
     destination: "88 Wilkinson Road, Freetown",
     vehicle_reg: "SL-BA-891 (Mitsubishi Fuso)",
+    vehicle_number: "SL-BA-891 (Mitsubishi Fuso)",
     driver_name: "Ibrahim Mansaray",
     driver_phone: "+232 78 554433",
     dispatch_time: "2026-11-17T09:15:00Z",
-    status: "assigned",
+    dispatched_at: "2026-11-17T09:15:00Z",
+    status: "dispatched",
+    delivery_status: "dispatched",
     estimated_arrival: "2026-11-17T11:00:00Z",
     notes: "Staged at Kissy Bay 3 loading dock."
   }
@@ -432,7 +485,7 @@ export const INITIAL_MOVEMENTS = [
     id: "mov-001",
     batch_number: "BTL-2026-001",
     product_name: "Sierra Pure Water 500ml",
-    movement_type: "Production Receipt",
+    movement_type: "STOCK_IN",
     quantity: 24850,
     source: "Line 1 Bottling",
     destination: "Kissy Central Warehouse",
@@ -443,7 +496,7 @@ export const INITIAL_MOVEMENTS = [
     id: "mov-002",
     batch_number: "BTL-2026-001",
     product_name: "Sierra Pure Water 500ml",
-    movement_type: "Dispatch",
+    movement_type: "STOCK_OUT",
     quantity: 7200,
     source: "Kissy Central Warehouse",
     destination: "Choithram Supermarket (ORD-2026-101)",
@@ -454,7 +507,7 @@ export const INITIAL_MOVEMENTS = [
     id: "mov-003",
     batch_number: "BTL-2026-002",
     product_name: "Lion Ginger Malt 330ml",
-    movement_type: "Production Receipt",
+    movement_type: "STOCK_IN",
     quantity: 17920,
     source: "Line 2 Canning",
     destination: "Kissy Central Warehouse",
@@ -466,30 +519,34 @@ export const INITIAL_MOVEMENTS = [
 export const DEMO_USERS: Record<string, any> = {
   "admin@sierrasprings.sl": {
     id: "user-001",
+    badge_id: "STAFF-ADMIN-001",
     email: "admin@sierrasprings.sl",
     full_name: "Mariama Sesay",
     role: "Company Administrator",
     company_id: "comp-001",
     company_name: "Sierra Springs & Beverages Ltd"
   },
-  "production@sierrasprings.sl": {
-    id: "user-002",
-    email: "production@sierrasprings.sl",
-    full_name: "Ibrahim Kamara",
-    role: "Production Manager",
-    company_id: "comp-001",
-    company_name: "Sierra Springs & Beverages Ltd"
-  },
   "quality@sierrasprings.sl": {
-    id: "user-003",
+    id: "user-002",
+    badge_id: "STAFF-QC-002",
     email: "quality@sierrasprings.sl",
     full_name: "Fatmata Bangura",
     role: "Quality Control Officer",
     company_id: "comp-001",
     company_name: "Sierra Springs & Beverages Ltd"
   },
+  "production@sierrasprings.sl": {
+    id: "user-003",
+    badge_id: "STAFF-PROD-003",
+    email: "production@sierrasprings.sl",
+    full_name: "Ibrahim Kamara",
+    role: "Production Manager",
+    company_id: "comp-001",
+    company_name: "Sierra Springs & Beverages Ltd"
+  },
   "warehouse@sierrasprings.sl": {
     id: "user-004",
+    badge_id: "STAFF-WH-004",
     email: "warehouse@sierrasprings.sl",
     full_name: "Mohamed Turay",
     role: "Warehouse Manager",
@@ -498,6 +555,7 @@ export const DEMO_USERS: Record<string, any> = {
   },
   "distribution@sierrasprings.sl": {
     id: "user-005",
+    badge_id: "STAFF-DIST-005",
     email: "distribution@sierrasprings.sl",
     full_name: "Alhaji Conteh",
     role: "Distribution Officer",
@@ -506,6 +564,7 @@ export const DEMO_USERS: Record<string, any> = {
   },
   "superadmin@beveragetrack.sl": {
     id: "user-000",
+    badge_id: "STAFF-GLOBAL-000",
     email: "superadmin@beveragetrack.sl",
     full_name: "Dr. Alpha Bah",
     role: "Super Administrator",

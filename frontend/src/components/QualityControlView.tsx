@@ -183,7 +183,7 @@ export const QualityControlView: React.FC<QualityControlViewProps> = ({
                   </span>
                 </div>
                 <p className="text-xs font-semibold text-slate-800 mt-1">{b.product_name}</p>
-                <p className="text-[11px] text-slate-500">{b.quantity_produced.toLocaleString()} bottles • {b.production_date}</p>
+                <p className="text-[11px] text-slate-500">{Number(b.quantity_produced || b.produced_quantity || 0).toLocaleString()} bottles • {b.production_date}</p>
               </div>
 
               <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-2">

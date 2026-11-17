@@ -164,8 +164,8 @@ export const QRTraceabilityView: React.FC<QRTraceabilityViewProps> = ({
                   <span className="text-[11px] text-slate-400">{batch?.production_date}</span>
                 </div>
                 <p className="text-xs text-slate-600">
-                  Manufactured <strong>{batch?.quantity_produced?.toLocaleString()} bottles</strong> on{' '}
-                  <strong>{batch?.line_name || 'High-Speed Line 01'}</strong>. Rejected {batch?.quantity_rejected} defective preforms during blowing.
+                  Manufactured <strong>{Number(batch?.quantity_produced || batch?.produced_quantity || 0).toLocaleString()} bottles</strong> on{' '}
+                  <strong>{batch?.line_name || 'High-Speed Line 01'}</strong>. Rejected {Number(batch?.quantity_rejected || 0).toLocaleString()} defective preforms during blowing.
                 </p>
               </div>
             </div>
