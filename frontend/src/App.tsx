@@ -266,6 +266,15 @@ export const App: React.FC = () => {
             </p>
           </div>
 
+          <div className="mb-4 p-2.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-900 text-xs flex items-center justify-between">
+            <span className="flex items-center gap-1.5 font-bold">
+              <Sparkles className="w-4 h-4 text-sky-600 flex-shrink-0" /> Interactive Cloud Demo Active
+            </span>
+            <span className="text-[10px] text-sky-700 font-semibold bg-white/80 px-2 py-0.5 rounded border border-sky-200">
+              Zero Setup Needed
+            </span>
+          </div>
+
           {loginError && (
             <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />

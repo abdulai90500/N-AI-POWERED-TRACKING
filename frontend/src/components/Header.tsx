@@ -1,6 +1,6 @@
 import React from 'react';
-import { User } from '../services/api';
-import { Bell, ShieldCheck, Factory, LogOut, ChevronDown } from 'lucide-react';
+import { User, api } from '../services/api';
+import { Bell, ShieldCheck, Factory, LogOut, ChevronDown, Radio } from 'lucide-react';
 
 interface HeaderProps {
   currentUser: User | null;
@@ -39,10 +39,20 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onRoleSwitch, onLog
       <div className="flex items-center gap-3">
         <div>
           <h1 className="text-xl font-bold text-slate-900 tracking-tight">{getTitle()}</h1>
-          <p className="text-xs text-slate-500 flex items-center gap-1.5 font-medium">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Freetown Operations • Sierra Springs & Beverages Ltd • Multi-Tenant
-          </p>
+          <div className="flex items-center gap-2 mt-0.5">
+            <p className="text-xs text-slate-500 flex items-center gap-1.5 font-medium">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Freetown Operations • Sierra Springs & Beverages Ltd • Multi-Tenant
+            </p>
+            <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+              api.isLiveBackend
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                : 'bg-sky-50 text-sky-700 border-sky-200'
+            }`}>
+              <Radio className="w-2.5 h-2.5" />
+              {api.isLiveBackend ? 'Live PostgreSQL Backend' : 'Interactive Cloud Demo'}
+            </span>
+          </div>
         </div>
       </div>
 
