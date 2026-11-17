@@ -13,6 +13,9 @@ import { PublicTrackView } from './components/PublicTrackView';
 import { ReportsView } from './components/ReportsView';
 import { BottleAIScanIllustration } from './components/BottleAIScanIllustration';
 import { MobileQRScanner } from './components/MobileQRScanner';
+import { SettingsModal } from './components/SettingsModal';
+import { CredentialsDirectoryModal } from './components/CredentialsDirectoryModal';
+import { AdminConsoleView } from './components/AdminConsoleView';
 import {
   Factory,
   ShieldCheck,
@@ -63,6 +66,10 @@ export const App: React.FC = () => {
   // QR Modal State
   const [activeQRBatch, setActiveQRBatch] = useState<any | null>(null);
   const [publicToken, setPublicToken] = useState<string>('');
+
+  // Settings & Credentials Modals
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isCredentialsOpen, setIsCredentialsOpen] = useState<boolean>(false);
 
   // Login form state - preloaded with Admin as primary assigned role
   const [email, setEmail] = useState('admin@sierrasprings.sl');
@@ -256,6 +263,23 @@ export const App: React.FC = () => {
     setActiveTab('public-track');
   };
 
+  const handleUpdateProfile = (updated: Partial<User>) => {
+    if (currentUser) {
+      const updatedUser = { ...currentUser, ...updated };
+      setCurrentUser(updatedUser);
+      localStorage.setItem('bt_current_user', JSON.stringify(updatedUser));
+    }
+  };
+
+  const handleAbortBatch = async (batchId: string, reason: string) => {
+    try {
+      await api.rejectBatch(batchId, reason);
+      await loadAllData();
+    } catch (err: any) {
+      console.warn('Batch abort error:', err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white">
@@ -300,15 +324,27 @@ export const App: React.FC = () => {
                   <span>Republic of Sierra Leone</span>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setShowMobileScanner(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold hover:bg-sky-100 transition shadow-sm"
-                  title="Open bottle traceability camera"
-                >
-                  <Camera className="w-3.5 h-3.5 text-sky-600" />
-                  <span>Consumer Scan</span>
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsCredentialsOpen(true)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold hover:bg-slate-200 transition shadow-xs"
+                    title="View all test staff credentials"
+                  >
+                    <KeyRound className="w-3.5 h-3.5 text-sky-600" />
+                    <span>Credentials</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowMobileScanner(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold hover:bg-sky-100 transition shadow-sm"
+                    title="Open bottle traceability camera"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-sky-600" />
+                    <span>Consumer Scan</span>
+                  </button>
+                </div>
               </div>
 
               {/* Title & Brand */}
@@ -524,6 +560,13 @@ export const App: React.FC = () => {
           </div>
 
         </div>
+
+        {/* Credentials Directory Modal on Login */}
+        <CredentialsDirectoryModal
+          isOpen={isCredentialsOpen}
+          onClose={() => setIsCredentialsOpen(false)}
+          onSelectUser={(email) => handleQuickLogin(email)}
+        />
       </div>
     );
   }
@@ -538,6 +581,7 @@ export const App: React.FC = () => {
         unreadAlertsCount={overview?.kpis?.ai_anomalies_flagged || 0}
         currentUser={currentUser}
         onLogout={handleLogout}
+        onOpenSettings={() => setIsSettingsOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -547,6 +591,9 @@ export const App: React.FC = () => {
           onRoleSwitch={handleRoleSwitch}
           onLogout={handleLogout}
           activeTab={activeTab}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          onOpenCredentials={() => setIsCredentialsOpen(true)}
+          kpis={overview?.kpis}
         />
 
         <main className="p-6 flex-1 overflow-y-auto max-w-7xl w-full mx-auto">
@@ -632,6 +679,15 @@ export const App: React.FC = () => {
             />
           )}
 
+          {activeTab === 'admin' && (
+            <AdminConsoleView
+              currentUser={currentUser}
+              batches={batches}
+              onAbortBatch={handleAbortBatch}
+              onReleaseBatch={handleReleaseBatch}
+            />
+          )}
+
           {activeTab === 'reports' && (
             <ReportsView
               overview={overview}
@@ -692,6 +748,21 @@ export const App: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* User Profile & Password Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        currentUser={currentUser}
+        onUpdateProfile={handleUpdateProfile}
+      />
+
+      {/* Staff Login Credentials Directory Modal */}
+      <CredentialsDirectoryModal
+        isOpen={isCredentialsOpen}
+        onClose={() => setIsCredentialsOpen(false)}
+        onSelectUser={(email) => handleQuickLogin(email)}
+      />
     </div>
   );
 };

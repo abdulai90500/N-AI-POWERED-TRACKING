@@ -420,16 +420,16 @@ export const AIQualityHubView: React.FC<AIQualityHubViewProps> = ({
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-bold text-xs">Batch Failure Probability</span>
                   <span className="text-sm font-extrabold text-indigo-700">
-                    {(predictionResult.failure_probability * 100).toFixed(1)}%
+                    {(Number(predictionResult.failure_probability || 0) * 100).toFixed(1)}%
                   </span>
                 </div>
                 <div className="w-full bg-indigo-200 rounded-full h-2.5 overflow-hidden mb-3">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
-                      predictionResult.failure_probability > 0.6 ? 'bg-rose-500' :
-                      predictionResult.failure_probability > 0.3 ? 'bg-amber-500' : 'bg-emerald-500'
+                      Number(predictionResult.failure_probability || 0) > 0.6 ? 'bg-rose-500' :
+                      Number(predictionResult.failure_probability || 0) > 0.3 ? 'bg-amber-500' : 'bg-emerald-500'
                     }`}
-                    style={{ width: `${predictionResult.failure_probability * 100}%` }}
+                    style={{ width: `${Math.min(100, Number(predictionResult.failure_probability || 0) * 100)}%` }}
                   ></div>
                 </div>
                 <div className="flex justify-between items-center text-xs mb-2">
@@ -484,25 +484,29 @@ export const AIQualityHubView: React.FC<AIQualityHubViewProps> = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {predictions.map((p) => {
-                const isAnom = p.prediction_label.toUpperCase().includes('ANOMALY') || p.risk_score > 0.5;
+              {(predictions || []).map((p, idx) => {
+                const label = p.prediction_label || p.predicted_risk_level || (p.anomaly_detected ? 'ANOMALY DETECTED' : 'NORMAL PASSED');
+                const isAnom = label.toUpperCase().includes('ANOMALY') || label.toUpperCase().includes('HIGH') || (Number(p.risk_score || p.anomaly_score || 0) > 0.5);
+                const score = typeof p.risk_score === 'number' ? p.risk_score : (typeof p.anomaly_score === 'number' ? p.anomaly_score : 0.05);
+                const explanation = p.explanation?.reasons?.join(', ') || p.primary_risk_factors?.join(', ') || p.explanation?.recommendation || p.recommendation || 'Standard model inference.';
+
                 return (
-                  <tr key={p.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-5 py-3.5 font-bold font-mono text-slate-900">{p.batch_number}</td>
-                    <td className="px-5 py-3.5 font-medium text-slate-800">{p.model_name}</td>
-                    <td className="px-5 py-3.5 text-slate-500 uppercase text-[10px] font-bold">{p.prediction_type}</td>
+                  <tr key={p.id || idx} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-5 py-3.5 font-bold font-mono text-slate-900">{p.batch_number || 'BTL-BATCH'}</td>
+                    <td className="px-5 py-3.5 font-medium text-slate-800">{p.model_name || p.model_version || 'Isolation Forest v2.1'}</td>
+                    <td className="px-5 py-3.5 text-slate-500 uppercase text-[10px] font-bold">{p.prediction_type || 'Quality & Risk'}</td>
                     <td className="px-5 py-3.5">
                       <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded ${
                         isAnom ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'
                       }`}>
-                        {p.prediction_label}
+                        {label}
                       </span>
                     </td>
                     <td className="px-5 py-3.5 font-mono font-bold text-slate-800">
-                      {typeof p.risk_score === 'number' ? p.risk_score.toFixed(3) : p.risk_score}
+                      {typeof score === 'number' ? score.toFixed(3) : score}
                     </td>
                     <td className="px-5 py-3.5 text-slate-600 text-[11px] max-w-sm truncate">
-                      {p.explanation?.reasons?.join(', ') || p.explanation?.recommendation || 'Standard evaluation.'}
+                      {explanation}
                     </td>
                   </tr>
                 );

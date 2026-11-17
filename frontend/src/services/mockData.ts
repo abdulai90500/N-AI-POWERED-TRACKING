@@ -307,6 +307,10 @@ export const INITIAL_PREDICTIONS = [
     batch_id: "batch-003",
     batch_number: "BTL-2026-003",
     product_name: "Salone Cola 500ml",
+    model_name: "Isolation Forest v2.1",
+    prediction_type: "Multivariate Anomaly & Failure Risk",
+    prediction_label: "ANOMALY DETECTED - HIGH RISK",
+    risk_score: 0.88,
     anomaly_detected: true,
     anomaly_score: 0.88,
     failure_probability: 0.94,
@@ -316,6 +320,14 @@ export const INITIAL_PREDICTIONS = [
       "Underfilled containers (491.5ml average)",
       "Substandard torque tightness (12.1 in-lb)"
     ],
+    explanation: {
+      reasons: [
+        "Severe pH anomaly (8.42 vs 3.10 target)",
+        "Underfilled containers (491.5ml average)",
+        "Substandard torque tightness (12.1 in-lb)"
+      ],
+      recommendation: "Immediate batch recall/quarantine. Halt Line 1 CIP rinse line. Inspect valve seals and conduct microbiological assay."
+    },
     recommendation: "Immediate batch recall/quarantine. Halt Line 1 CIP rinse line. Inspect valve seals and conduct microbiological assay.",
     model_version: "IsolationForest-v2.1 / RandomForest-v2.1",
     created_at: "2026-11-16T15:21:00Z"
@@ -325,14 +337,44 @@ export const INITIAL_PREDICTIONS = [
     batch_id: "batch-001",
     batch_number: "BTL-2026-001",
     product_name: "Sierra Pure Water 500ml",
+    model_name: "Isolation Forest v2.1",
+    prediction_type: "Multivariate Anomaly & Failure Risk",
+    prediction_label: "NORMAL QUALITY - PASSED",
+    risk_score: 0.05,
     anomaly_detected: false,
     anomaly_score: 0.05,
     failure_probability: 0.02,
     predicted_risk_level: "LOW",
     primary_risk_factors: ["Normal variation within 99.8% confidence interval"],
+    explanation: {
+      reasons: ["Normal variation within 99.8% confidence interval"],
+      recommendation: "Release batch to Kissy Central Warehouse for distribution."
+    },
     recommendation: "Release batch to Kissy Central Warehouse for distribution.",
     model_version: "IsolationForest-v2.1 / RandomForest-v2.1",
     created_at: "2026-11-15T11:46:00Z"
+  },
+  {
+    id: "pred-003",
+    batch_id: "batch-002",
+    batch_number: "BTL-2026-002",
+    product_name: "Lion Ginger Malt 330ml",
+    model_name: "Random Forest v2.1",
+    prediction_type: "Physical Defect & Hermeticity",
+    prediction_label: "SLSB CERTIFIED - NOMINAL",
+    risk_score: 0.08,
+    anomaly_detected: false,
+    anomaly_score: 0.08,
+    failure_probability: 0.04,
+    predicted_risk_level: "LOW",
+    primary_risk_factors: ["Cap torque optimal at 21.5 in-lb", "Brix level within 11.4 +/- 0.2"],
+    explanation: {
+      reasons: ["Cap torque optimal at 21.5 in-lb", "Brix level within 11.4 +/- 0.2"],
+      recommendation: "Batch conforms to Sierra Leone beverage standards. Approved."
+    },
+    recommendation: "Batch conforms to Sierra Leone beverage standards. Approved.",
+    model_version: "IsolationForest-v2.1 / RandomForest-v2.1",
+    created_at: "2026-11-15T14:30:00Z"
   }
 ];
 

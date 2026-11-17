@@ -1,15 +1,27 @@
 import React from 'react';
 import { User, api } from '../services/api';
-import { Bell, ShieldCheck, Factory, LogOut, ChevronDown, Radio } from 'lucide-react';
+import { Bell, ShieldCheck, Factory, LogOut, ChevronDown, Radio, Settings, KeyRound } from 'lucide-react';
+import { VoiceAssistant } from './VoiceAssistant';
 
 interface HeaderProps {
   currentUser: User | null;
   onRoleSwitch: (role: string) => void;
   onLogout: () => void;
   activeTab: string;
+  onOpenSettings?: () => void;
+  onOpenCredentials?: () => void;
+  kpis?: any;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentUser, onRoleSwitch, onLogout, activeTab }) => {
+export const Header: React.FC<HeaderProps> = ({
+  currentUser,
+  onRoleSwitch,
+  onLogout,
+  activeTab,
+  onOpenSettings,
+  onOpenCredentials,
+  kpis,
+}) => {
   const roles = [
     'Company Administrator',
     'Production Manager',
@@ -29,6 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onRoleSwitch, onLog
       case 'distribution': return 'Distribution, Fleet & Order Fulfillment';
       case 'tracking': return 'QR Code Batch Traceability System';
       case 'public-track': return 'Public Bottle Verification Portal';
+      case 'admin': return 'Administrative Governance & System Controls';
       case 'reports': return 'Compliance, Audit Logs & Analytics';
       default: return 'Overview';
     }
@@ -57,6 +70,26 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onRoleSwitch, onLog
       </div>
 
       <div className="flex items-center gap-3 flex-wrap">
+        {/* Audio Sound Reader / Voice Assistant Button */}
+        <VoiceAssistant
+          activeTab={activeTab}
+          currentUserRole={currentUser?.role}
+          kpis={kpis}
+        />
+
+        {/* Credentials Directory Button */}
+        {onOpenCredentials && (
+          <button
+            type="button"
+            onClick={onOpenCredentials}
+            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 shadow-xs border border-slate-200"
+            title="View all system login credentials"
+          >
+            <KeyRound className="w-3.5 h-3.5 text-sky-600" />
+            <span className="hidden sm:inline">Credentials</span>
+          </button>
+        )}
+
         {/* Role Switcher for quick demo/examination */}
         <div className="flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
           <span className="text-xs text-slate-500 px-2 font-medium flex items-center gap-1">
@@ -76,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onRoleSwitch, onLog
           </select>
         </div>
 
-        {/* User Card */}
+        {/* User Card with Settings Trigger */}
         <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
           <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-xs shadow">
             {currentUser?.full_name?.split(' ').map(n => n[0]).join('') || 'U'}
@@ -85,6 +118,16 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onRoleSwitch, onLog
             <p className="text-xs font-bold text-slate-800 leading-tight">{currentUser?.full_name || 'Staff'}</p>
             <p className="text-[10px] text-brand-600 font-semibold">{currentUser?.role || 'User'}</p>
           </div>
+          {onOpenSettings && (
+            <button
+              type="button"
+              onClick={onOpenSettings}
+              className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
+              title="Edit Profile & Change Password"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         {/* Highly Visible Sign Out / Return to Login Button */}

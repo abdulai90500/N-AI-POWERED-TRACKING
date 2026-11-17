@@ -11,7 +11,9 @@ import {
   FileText,
   Building2,
   Sparkles,
-  LogOut
+  LogOut,
+  ShieldAlert,
+  Settings
 } from 'lucide-react';
 import { User } from '../services/api';
 
@@ -21,6 +23,7 @@ interface SidebarProps {
   unreadAlertsCount?: number;
   currentUser?: User | null;
   onLogout?: () => void;
+  onOpenSettings?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -28,7 +31,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setActiveTab,
   unreadAlertsCount = 1,
   currentUser,
-  onLogout
+  onLogout,
+  onOpenSettings,
 }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -39,6 +43,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'distribution', label: 'Distribution', icon: Truck },
     { id: 'tracking', label: 'QR Batch Tracking', icon: QrCode },
     { id: 'public-track', label: 'Public Verification', icon: Smartphone },
+    { id: 'admin', label: 'Admin Console', icon: ShieldAlert, highlight: true },
     { id: 'reports', label: 'Reports & Logs', icon: FileText },
   ];
 
@@ -110,14 +115,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {currentUser && (
           <div className="pt-2 border-t border-slate-800/80">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-6 rounded-full bg-sky-600 text-white flex items-center justify-center font-bold text-[10px]">
-                {currentUser.full_name?.split(' ').map(n => n[0]).join('') || 'U'}
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2 truncate">
+                <div className="w-6 h-6 rounded-full bg-sky-600 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0">
+                  {currentUser.full_name?.split(' ').map(n => n[0]).join('') || 'U'}
+                </div>
+                <div className="truncate">
+                  <p className="text-xs font-bold text-white truncate">{currentUser.full_name}</p>
+                  <p className="text-[10px] text-sky-400 truncate">{currentUser.role}</p>
+                </div>
               </div>
-              <div className="truncate">
-                <p className="text-xs font-bold text-white truncate">{currentUser.full_name}</p>
-                <p className="text-[10px] text-sky-400 truncate">{currentUser.role}</p>
-              </div>
+              {onOpenSettings && (
+                <button
+                  type="button"
+                  onClick={onOpenSettings}
+                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition flex-shrink-0"
+                  title="Edit Profile & Password Settings"
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
 
             {onLogout && (
