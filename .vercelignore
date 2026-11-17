@@ -1,0 +1,6 @@
+# Vercel deployment ignore
+backend/
+docker-compose.yml
+Dockerfile
+*.bat
+*.ps1
