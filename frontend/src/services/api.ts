@@ -20,8 +20,9 @@ export const getApiBase = (): string => {
     if (custom) return custom;
 
     // Check Vite environment variable
-    if (import.meta.env.VITE_API_URL) {
-      return `${import.meta.env.VITE_API_URL}/api/v1`;
+    const metaEnv = (import.meta as any)?.env;
+    if (metaEnv?.VITE_API_URL) {
+      return `${metaEnv.VITE_API_URL}/api/v1`;
     }
 
     // In local development
