@@ -21,3 +21,25 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Sidebar Custom Scrollbar */
+.sidebar-scrollbar::-webkit-scrollbar {
+  width: 7px;
+}
+.sidebar-scrollbar::-webkit-scrollbar-track {
+  background: #0f172a;
+  border-radius: 4px;
+}
+.sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background: #0284c7;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+.sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
+}
+
+.sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #0284c7 #0f172a;
+}
