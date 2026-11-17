@@ -1,3 +1,11 @@
+# Node / Frontend
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+frontend/.next/
+*.local
+
 # Python
 __pycache__/
 *.py[cod]
@@ -6,16 +14,9 @@ __pycache__/
 .Python
 backend/venv/
 *.egg-info/
-dist/
 build/
 *.db
 *.sqlite3
-
-# Node / Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.next/
-*.local
 
 # Environment & IDE
 .env
