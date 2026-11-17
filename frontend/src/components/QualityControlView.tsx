@@ -412,11 +412,52 @@ export const QualityControlView: React.FC<QualityControlViewProps> = ({
                 ></textarea>
               </div>
 
-              <div className="bg-sky-50 p-3 rounded-lg border border-sky-100 text-xs text-sky-800 flex items-center gap-2">
-                <BrainCircuit className="w-4 h-4 text-sky-600 flex-shrink-0" />
-                <span>
-                  The <strong>Isolation Forest</strong> and <strong>Random Forest</strong> AI engines will evaluate these measurements upon submit.
-                </span>
+              {/* Real-Time AI Quality Copilot Diagnostic Assistant */}
+              <div className={`p-3.5 rounded-xl border text-xs transition-all duration-300 ${
+                isPhAnomaly || isVolAnomaly || isDefectFlag
+                  ? 'bg-rose-50 border-rose-200 text-rose-950'
+                  : 'bg-gradient-to-r from-sky-50 to-indigo-50 border-sky-200 text-slate-800'
+              }`}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <BrainCircuit className={`w-4 h-4 ${isPhAnomaly || isVolAnomaly || isDefectFlag ? 'text-rose-600' : 'text-sky-600'}`} />
+                    <span>Real-Time AI Quality Copilot</span>
+                  </div>
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded uppercase ${
+                    isPhAnomaly || isVolAnomaly || isDefectFlag
+                      ? 'bg-rose-200 text-rose-900'
+                      : 'bg-emerald-100 text-emerald-800'
+                  }`}>
+                    {isPhAnomaly || isVolAnomaly || isDefectFlag ? 'Risk: Anomaly Detected' : 'Risk: Optimal (Passed)'}
+                  </span>
+                </div>
+
+                {isPhAnomaly || isVolAnomaly || isDefectFlag ? (
+                  <div className="space-y-1 text-[11px] leading-relaxed">
+                    {isPhAnomaly && (
+                      <p className="text-rose-800 font-semibold">
+                        • <strong>pH Anomaly ({numPh.toFixed(2)}):</strong> Out of specification (6.5 - 8.0). Suspected CIP caustic wash rinse residue in filling manifold.
+                      </p>
+                    )}
+                    {isVolAnomaly && (
+                      <p className="text-rose-800 font-semibold">
+                        • <strong>Volumetric Deviation ({numVol.toFixed(1)}ml):</strong> Exceeds permissible ±5ml tolerance. Check filler valve #2 diaphragm.
+                      </p>
+                    )}
+                    {isDefectFlag && (
+                      <p className="text-rose-800 font-semibold">
+                        • <strong>Visual Defects ({numDefects}):</strong> Defective seals/particles detected by optical inspection.
+                      </p>
+                    )}
+                    <p className="mt-1 pt-1 border-t border-rose-200/60 font-bold text-rose-900">
+                      Recommendation: Automatic quarantine recommended upon submission.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    All parameters match historical baseline runs (99.8% SLSB conformity). Isolation Forest and Random Forest classifiers will automatically certify this batch for warehouse transfer.
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">

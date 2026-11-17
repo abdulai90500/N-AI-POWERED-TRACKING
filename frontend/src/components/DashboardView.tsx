@@ -9,7 +9,11 @@ import {
   ArrowUpRight,
   ShieldAlert,
   Clock,
-  ArrowRight
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Activity,
+  Cpu
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -147,6 +151,109 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </p>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-amber-500"></div>
+        </div>
+      </div>
+
+      {/* AI Factory Intelligence & Root-Cause Matrix */}
+      <div className="bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 rounded-2xl p-6 text-white shadow-xl border border-sky-900/50">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-sky-900/60 mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sky-400 shadow-inner">
+              <BrainCircuit className="w-5 h-5 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-extrabold tracking-tight">AI Predictive Quality Intelligence Engine</h2>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300">
+                  Model v2.1.0 Online
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-0.5">
+                Automated Isolation Forest anomaly detection & Random Forest failure prediction across Freetown bottling lines
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => onNavigate('ai')}
+            className="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Open AI Intelligence Hub</span>
+            <ArrowRight className="w-3 h-3" />
+          </button>
+        </div>
+
+        {/* 3 AI Diagnostics Insight Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Diagnostic 1 */}
+          <div className="p-4 rounded-xl bg-slate-900/80 border border-rose-500/40 shadow-inner">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1">
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+                Active Anomaly Alert
+              </span>
+              <span className="text-[10px] font-mono bg-rose-950/80 text-rose-300 px-2 py-0.5 rounded font-bold">
+                Batch BTL-2026-003
+              </span>
+            </div>
+            <p className="text-xs font-bold text-white leading-snug">
+              Alkaline pH Drift (8.42 pH vs 3.10 target)
+            </p>
+            <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">
+              <strong>Root Cause:</strong> Line 1 CIP caustic rinse valve seal erosion allowing cleaning chemical ingress.
+            </p>
+            <div className="mt-3 pt-2 border-t border-rose-900/40 text-[10px] font-bold text-rose-300 flex justify-between">
+              <span>Failure Probability: 93.4%</span>
+              <span className="text-amber-300">Quarantine Active</span>
+            </div>
+          </div>
+
+          {/* Diagnostic 2 */}
+          <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-500/30 shadow-inner">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1">
+                <Cpu className="w-3.5 h-3.5 text-sky-400" />
+                Line 1 Volumetric Health
+              </span>
+              <span className="text-[10px] font-mono bg-sky-950/80 text-sky-300 px-2 py-0.5 rounded font-bold">
+                500ml Bottling
+              </span>
+            </div>
+            <p className="text-xs font-bold text-white leading-snug">
+              Average Fill: 500.4ml (Variance +0.08%)
+            </p>
+            <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">
+              <strong>Prediction:</strong> Filling manifold pressure stable. Projected 7-day volumetric conformity at 99.4%.
+            </p>
+            <div className="mt-3 pt-2 border-t border-sky-900/40 text-[10px] font-bold text-emerald-400 flex justify-between">
+              <span>Hermeticity: Nominal</span>
+              <span>SLSB Compliant</span>
+            </div>
+          </div>
+
+          {/* Diagnostic 3 */}
+          <div className="p-4 rounded-xl bg-slate-900/80 border border-emerald-500/30 shadow-inner">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                <Activity className="w-3.5 h-3.5 text-emerald-400" />
+                Line 2 Canning & Glass
+              </span>
+              <span className="text-[10px] font-mono bg-emerald-950/80 text-emerald-300 px-2 py-0.5 rounded font-bold">
+                Ginger Malt
+              </span>
+            </div>
+            <p className="text-xs font-bold text-white leading-snug">
+              Crown Seal Torque: 21.5 in-lb (Target 22.0)
+            </p>
+            <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">
+              <strong>Maintenance AI:</strong> Capper chuck calibration optimal. Next preventative inspection scheduled in 12 days.
+            </p>
+            <div className="mt-3 pt-2 border-t border-emerald-900/40 text-[10px] font-bold text-sky-300 flex justify-between">
+              <span>Brix Sugar: 11.4 °Bx</span>
+              <span className="text-emerald-400">Zero Defect Run</span>
+            </div>
+          </div>
         </div>
       </div>
 
