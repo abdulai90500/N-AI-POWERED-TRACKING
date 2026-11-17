@@ -87,12 +87,14 @@ export const Header: React.FC<HeaderProps> = ({ currentUser, onRoleSwitch, onLog
           </div>
         </div>
 
+        {/* Highly Visible Sign Out / Return to Login Button */}
         <button
           onClick={onLogout}
-          title="Sign out"
-          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+          className="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm"
+          title="Sign out of current account and return to login screen"
         >
-          <LogOut className="w-4 h-4" />
+          <LogOut className="w-3.5 h-3.5 text-rose-600" />
+          <span>Sign Out</span>
         </button>
       </div>
     </header>

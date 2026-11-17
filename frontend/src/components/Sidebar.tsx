@@ -10,16 +10,26 @@ import {
   Smartphone,
   FileText,
   Building2,
-  Sparkles
+  Sparkles,
+  LogOut
 } from 'lucide-react';
+import { User } from '../services/api';
 
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   unreadAlertsCount?: number;
+  currentUser?: User | null;
+  onLogout?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, unreadAlertsCount = 1 }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  activeTab,
+  setActiveTab,
+  unreadAlertsCount = 1,
+  currentUser,
+  onLogout
+}) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'production', label: 'Production', icon: Factory },
@@ -89,20 +99,41 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, unrea
         })}
       </nav>
 
-      {/* System Status Footer */}
-      <div className="p-4 border-t border-slate-800/80 bg-slate-950/40 text-[11px] text-slate-400 space-y-1.5">
+      {/* System Status & Sign Out Footer */}
+      <div className="p-4 border-t border-slate-800/80 bg-slate-950/60 text-[11px] text-slate-400 space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-slate-400">AI Engine</span>
           <span className="text-emerald-400 font-medium flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Calibrated
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Active v2.1
           </span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-slate-400">Traceability</span>
-          <span className="text-sky-400 font-medium">QR Token Gen active</span>
-        </div>
-        <div className="text-[10px] text-slate-400 pt-2 border-t border-slate-800/60">
-          BeverageTrack MVP v1.0 • Freetown
+
+        {currentUser && (
+          <div className="pt-2 border-t border-slate-800/80">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-6 h-6 rounded-full bg-sky-600 text-white flex items-center justify-center font-bold text-[10px]">
+                {currentUser.full_name?.split(' ').map(n => n[0]).join('') || 'U'}
+              </div>
+              <div className="truncate">
+                <p className="text-xs font-bold text-white truncate">{currentUser.full_name}</p>
+                <p className="text-[10px] text-sky-400 truncate">{currentUser.role}</p>
+              </div>
+            </div>
+
+            {onLogout && (
+              <button
+                onClick={onLogout}
+                className="w-full py-2 bg-rose-950/70 hover:bg-rose-900 border border-rose-800 text-rose-300 hover:text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign Out & Back to Login</span>
+              </button>
+            )}
+          </div>
+        )}
+
+        <div className="text-[10px] text-slate-500 pt-1 text-center">
+          BeverageTrack AI • Freetown, SL
         </div>
       </div>
     </aside>

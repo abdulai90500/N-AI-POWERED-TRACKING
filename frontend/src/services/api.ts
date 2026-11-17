@@ -29,7 +29,8 @@ export const getApiBase = (): string => {
       return 'http://localhost:8000/api/v1';
     }
   }
-  return '/api/v1';
+  // Return empty string for standalone cloud demo so calls resolve instantly in-browser
+  return '';
 };
 
 export interface User {
@@ -88,6 +89,13 @@ class ApiService {
 
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const apiBase = getApiBase();
+    
+    // If no live backend is configured (e.g. standalone Vercel preview), resolve immediately via in-browser engine
+    if (!apiBase) {
+      this.isLiveBackend = false;
+      return this.handleFallback<T>(endpoint, options);
+    }
+
     const url = `${apiBase}${endpoint}`;
     const token = this.getToken();
 
@@ -101,9 +109,9 @@ class ApiService {
     }
 
     try {
-      // Set a 3s timeout for local/remote API connection before graceful fallback
+      // 1.5s timeout for local API connection check
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      const timeoutId = setTimeout(() => controller.abort(), 1500);
 
       const res = await fetch(url, {
         ...options,
@@ -112,21 +120,13 @@ class ApiService {
       });
       clearTimeout(timeoutId);
 
-      if (!res.ok) {
-        let errMessage = `Error ${res.status}: ${res.statusText}`;
-        try {
-          const errData = await res.json();
-          if (errData.detail) {
-            errMessage = typeof errData.detail === 'string' ? errData.detail : JSON.stringify(errData.detail);
-          }
-        } catch (_) {}
-        throw new Error(errMessage);
+      const contentType = res.headers.get('content-type') || '';
+      if (!res.ok || !contentType.includes('application/json')) {
+        throw new Error(`Invalid response (${res.status})`);
       }
       this.isLiveBackend = true;
       return await res.json();
-    } catch (err: any) {
-      // If network error, timeout, or Mixed Content / Failed to fetch:
-      // Route transparently to in-browser demo store so user experience is smooth and uninterrupted
+    } catch (_) {
       this.isLiveBackend = false;
       return this.handleFallback<T>(endpoint, options);
     }
@@ -159,7 +159,14 @@ class ApiService {
 
     // Auth Me
     if (endpoint === '/auth/me') {
-      return DEMO_USERS['admin@sierrasprings.sl'] as unknown as T;
+      const token = this.getToken();
+      if (!token) {
+        throw new Error('Not authenticated. Please sign in.');
+      }
+      // If token exists, find matching demo user or default to admin
+      const email = token.replace('mock_jwt_token_', '');
+      const user = Object.values(DEMO_USERS).find(u => u.id === email || u.email === email) || DEMO_USERS['admin@sierrasprings.sl'];
+      return user as unknown as T;
     }
 
     // Demo Accounts

@@ -444,6 +444,8 @@ export const App: React.FC = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         unreadAlertsCount={overview?.kpis?.ai_anomalies_flagged || 0}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
 
       {/* Main Content Area */}

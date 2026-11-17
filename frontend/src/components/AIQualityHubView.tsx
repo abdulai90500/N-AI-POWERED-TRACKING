@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BrainCircuit,
   ShieldAlert,
@@ -9,7 +9,10 @@ import {
   TrendingUp,
   Cpu,
   BarChart3,
-  Layers
+  Layers,
+  Zap,
+  Activity,
+  Play
 } from 'lucide-react';
 
 interface AIQualityHubViewProps {
@@ -36,6 +39,67 @@ export const AIQualityHubView: React.FC<AIQualityHubViewProps> = ({
 
   const [loadingPrediction, setLoadingPrediction] = useState(false);
   const [predictionResult, setPredictionResult] = useState<any>(null);
+
+  // Auto-run AI inference whenever parameters change or on mount
+  useEffect(() => {
+    let isCancelled = false;
+    const runInference = async () => {
+      try {
+        const [anom, pred] = await Promise.all([
+          onRunAnomalyDetection({
+            product_type: productType,
+            ph: Number(simPh),
+            filling_volume: Number(simVol),
+            cap_torque: Number(simTorque),
+            temperature_c: Number(simTemp),
+            visual_defects: Number(simDefects)
+          }),
+          onRunFailurePrediction({
+            product_type: productType,
+            ph: Number(simPh),
+            filling_volume: Number(simVol),
+            production_line: 'Line 01'
+          })
+        ]);
+        if (!isCancelled) {
+          setAnomalyResult(anom);
+          setPredictionResult(pred);
+        }
+      } catch (err) {
+        console.warn('AI Live inference error:', err);
+      }
+    };
+
+    runInference();
+    return () => {
+      isCancelled = true;
+    };
+  }, [productType, simPh, simVol, simTorque, simTemp, simDefects]);
+
+  const applyPreset = (preset: 'optimal' | 'cip_anomaly' | 'mechanical_defect') => {
+    if (preset === 'optimal') {
+      setProductType('Bottled Water');
+      setSimPh(7.05);
+      setSimVol(500.2);
+      setSimTorque(1.85);
+      setSimTemp(22.5);
+      setSimDefects(0);
+    } else if (preset === 'cip_anomaly') {
+      setProductType('Carbonated Soft Drink');
+      setSimPh(8.42);
+      setSimVol(491.5);
+      setSimTorque(1.20);
+      setSimTemp(28.4);
+      setSimDefects(3);
+    } else if (preset === 'mechanical_defect') {
+      setProductType('Bottled Water');
+      setSimPh(7.10);
+      setSimVol(482.0);
+      setSimTorque(0.85);
+      setSimTemp(24.0);
+      setSimDefects(2);
+    }
+  };
 
   const handleTestAnomaly = async () => {
     setLoadingAnomaly(true);
@@ -161,6 +225,54 @@ export const AIQualityHubView: React.FC<AIQualityHubViewProps> = ({
                   <option value="Carbonated Soft Drink">Carbonated Soft Drink (Spec pH: 2.4 - 3.4, 500ml)</option>
                   <option value="Malt">Brewed Ginger Malt (Spec pH: 4.0 - 5.0, 330ml)</option>
                 </select>
+              </div>
+
+              {/* Quick 1-Click AI Test Scenarios */}
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                  <span>1-Click Test Scenarios:</span>
+                  <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Live Auto-Inference
+                  </span>
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => applyPreset('optimal')}
+                    className="p-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-bold text-left transition"
+                  >
+                    <div className="flex items-center gap-1">
+                      <CheckCircle className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                      <span>Optimal Water</span>
+                    </div>
+                    <p className="text-[10px] text-emerald-600 font-normal">pH 7.05 • 500ml</p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => applyPreset('cip_anomaly')}
+                    className="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 text-xs font-bold text-left transition"
+                  >
+                    <div className="flex items-center gap-1">
+                      <AlertTriangle className="w-3.5 h-3.5 text-rose-600 flex-shrink-0" />
+                      <span>CIP Rinse Leak</span>
+                    </div>
+                    <p className="text-[10px] text-rose-600 font-normal">pH 8.42 • High Drift</p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => applyPreset('mechanical_defect')}
+                    className="p-2 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-bold text-left transition"
+                  >
+                    <div className="flex items-center gap-1">
+                      <ShieldAlert className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
+                      <span>Loose Cap Seal</span>
+                    </div>
+                    <p className="text-[10px] text-amber-600 font-normal">0.85 Nm • 482ml</p>
+                  </button>
+                </div>
               </div>
 
               {/* Sliders */}
