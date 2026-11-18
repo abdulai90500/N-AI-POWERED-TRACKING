@@ -16,6 +16,7 @@ import { MobileQRScanner } from './components/MobileQRScanner';
 import { SettingsModal } from './components/SettingsModal';
 import { CredentialsDirectoryModal } from './components/CredentialsDirectoryModal';
 import { AdminConsoleView } from './components/AdminConsoleView';
+import { ProcessStepsModal } from './components/ProcessStepsModal';
 import {
   Factory,
   ShieldCheck,
@@ -70,6 +71,7 @@ export const App: React.FC = () => {
   // Settings & Credentials Modals
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isCredentialsOpen, setIsCredentialsOpen] = useState<boolean>(false);
+  const [isProcessStepsOpen, setIsProcessStepsOpen] = useState<boolean>(false);
 
   // Login form state - preloaded with Admin as primary assigned role
   const [email, setEmail] = useState('admin@sierrasprings.sl');
@@ -582,6 +584,7 @@ export const App: React.FC = () => {
         currentUser={currentUser}
         onLogout={handleLogout}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenProcessSteps={() => setIsProcessStepsOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -593,6 +596,7 @@ export const App: React.FC = () => {
           activeTab={activeTab}
           onOpenSettings={() => setIsSettingsOpen(true)}
           onOpenCredentials={() => setIsCredentialsOpen(true)}
+          onOpenProcessSteps={() => setIsProcessStepsOpen(true)}
           kpis={overview?.kpis}
         />
 
@@ -762,6 +766,13 @@ export const App: React.FC = () => {
         isOpen={isCredentialsOpen}
         onClose={() => setIsCredentialsOpen(false)}
         onSelectUser={(email) => handleQuickLogin(email)}
+      />
+
+      {/* Factory Process Steps (1-8) Lifecycle Modal */}
+      <ProcessStepsModal
+        isOpen={isProcessStepsOpen}
+        onClose={() => setIsProcessStepsOpen(false)}
+        onNavigateTab={(tab) => setActiveTab(tab)}
       />
     </div>
   );

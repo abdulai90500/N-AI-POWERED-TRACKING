@@ -24,6 +24,7 @@ interface SidebarProps {
   currentUser?: User | null;
   onLogout?: () => void;
   onOpenSettings?: () => void;
+  onOpenProcessSteps?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -33,6 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   currentUser,
   onLogout,
   onOpenSettings,
+  onOpenProcessSteps,
 }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -190,6 +192,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span>Volumetric Variance</span>
             <span className="text-emerald-400 font-bold">+0.08% Nom</span>
           </div>
+
+          {onOpenProcessSteps && (
+            <button
+              type="button"
+              onClick={onOpenProcessSteps}
+              className="w-full mt-2 py-1.5 px-2 rounded-lg bg-sky-950/80 hover:bg-sky-900/90 text-sky-300 border border-sky-800/80 font-bold text-[10px] transition flex items-center justify-center gap-1.5"
+            >
+              <Factory className="w-3 h-3 text-sky-400" />
+              <span>View Factory Steps (1-8)</span>
+            </button>
+          )}
         </div>
       </nav>
 

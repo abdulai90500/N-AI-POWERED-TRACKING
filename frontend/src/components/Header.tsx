@@ -10,6 +10,7 @@ interface HeaderProps {
   activeTab: string;
   onOpenSettings?: () => void;
   onOpenCredentials?: () => void;
+  onOpenProcessSteps?: () => void;
   kpis?: any;
 }
 
@@ -20,6 +21,7 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   onOpenSettings,
   onOpenCredentials,
+  onOpenProcessSteps,
   kpis,
 }) => {
   const roles = [
@@ -76,6 +78,20 @@ export const Header: React.FC<HeaderProps> = ({
           currentUserRole={currentUser?.role}
           kpis={kpis}
         />
+
+        {/* Factory Process Steps Flow Button */}
+        {onOpenProcessSteps && (
+          <button
+            type="button"
+            onClick={onOpenProcessSteps}
+            className="px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold transition flex items-center gap-1.5 shadow-xs border border-sky-200"
+            title="View complete factory process flow from Step 1 to Step 8"
+          >
+            <Factory className="w-3.5 h-3.5 text-sky-600" />
+            <span className="hidden md:inline">Process Steps</span>
+            <span className="text-[10px] font-mono bg-sky-600 text-white px-1.5 py-0.2 rounded font-black">1-8</span>
+          </button>
+        )}
 
         {/* Credentials Directory Button */}
         {onOpenCredentials && (
