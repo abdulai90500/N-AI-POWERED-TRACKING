@@ -310,10 +310,10 @@ class ApiService {
 
     if (endpoint.startsWith('/quality/parameters')) {
       return [
-        { name: 'pH Level', min_value: 6.5, max_value: 7.5, unit: 'pH' },
-        { name: 'Filling Volume', min_value: 495.0, max_value: 510.0, unit: 'ml' },
-        { name: 'Cap Seal Torque', min_value: 14.0, max_value: 24.0, unit: 'in-lb' },
-        { name: 'Visual Clarity & Seal', min_value: 0, max_value: 0, unit: 'defects' }
+        { id: 'param-ph', parameter_name: 'pH Level', name: 'pH Level', min_value: 6.5, max_value: 7.5, unit: 'pH' },
+        { id: 'param-vol', parameter_name: 'Filling Volume', name: 'Filling Volume', min_value: 495.0, max_value: 510.0, unit: 'ml' },
+        { id: 'param-torque', parameter_name: 'Cap Seal Torque', name: 'Cap Seal Torque', min_value: 14.0, max_value: 24.0, unit: 'in-lb' },
+        { id: 'param-visual', parameter_name: 'Visual Clarity & Seal', name: 'Visual Clarity & Seal', min_value: 0, max_value: 0, unit: 'defects' }
       ] as unknown as T;
     }
 

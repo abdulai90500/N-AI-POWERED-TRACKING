@@ -59,28 +59,37 @@ export const QualityControlView: React.FC<QualityControlViewProps> = ({
     e.preventDefault();
     setSubmitting(true);
     try {
-      // Find or build parameter entries
+      // Find or build parameter entries safely
+      const findParamId = (keyword: string, fallbackId: string) => {
+        if (!parameters || !Array.isArray(parameters)) return fallbackId;
+        const found = parameters.find((p: any) => {
+          const name = String(p?.parameter_name || p?.name || '').toLowerCase();
+          return name.includes(keyword.toLowerCase());
+        });
+        return found?.id || fallbackId;
+      };
+
       const measurements = [
         {
-          parameter_id: parameters.find(p => p.parameter_name.toLowerCase().includes('ph'))?.id || 'param-ph',
+          parameter_id: findParamId('ph', 'param-ph'),
           parameter_name: 'pH Level',
           measured_value: numPh,
           notes: isPhAnomaly ? 'Out of specification' : 'Within normal limits'
         },
         {
-          parameter_id: parameters.find(p => p.parameter_name.toLowerCase().includes('volume'))?.id || 'param-vol',
+          parameter_id: findParamId('volume', 'param-vol'),
           parameter_name: 'Filling Volume',
           measured_value: numVol,
           notes: isVolAnomaly ? 'Filling volume deviation detected' : 'Optimal volumetric fill'
         },
         {
-          parameter_id: parameters.find(p => p.parameter_name.toLowerCase().includes('torque') || p.parameter_name.toLowerCase().includes('seal'))?.id || 'param-torque',
+          parameter_id: findParamId('torque', 'param-torque') || findParamId('seal', 'param-torque'),
           parameter_name: 'Cap Torque & Seal',
           measured_value: numTorque,
           notes: 'Standard seal compression'
         },
         {
-          parameter_id: parameters.find(p => p.parameter_name.toLowerCase().includes('visual'))?.id || 'param-visual',
+          parameter_id: findParamId('visual', 'param-visual'),
           parameter_name: 'Visual Defects',
           measured_value: numDefects,
           notes: numDefects > 0 ? `${numDefects} defective bottles flagged` : 'Zero visual defects'
@@ -276,14 +285,14 @@ export const QualityControlView: React.FC<QualityControlViewProps> = ({
                                 : 'bg-slate-100 text-slate-700'
                             }`}
                           >
-                            {m.parameter_name}: {m.measured_value}
+                            {m.parameter_name || m.name || 'Parameter'}: {m.measured_value}
                           </span>
                         ))}
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 text-slate-600 max-w-xs truncate">{ins.remarks}</td>
+                    <td className="px-5 py-3.5 text-slate-600 max-w-xs truncate">{ins.remarks || ins.notes || 'Inspection recorded.'}</td>
                     <td className="px-5 py-3.5 text-slate-400 text-[11px]">
-                      {new Date(ins.inspected_at).toLocaleDateString()}
+                      {ins.inspected_at ? new Date(ins.inspected_at).toLocaleDateString() : (ins.created_at ? new Date(ins.created_at).toLocaleDateString() : '2026-11-18')}
                     </td>
                   </tr>
                 );

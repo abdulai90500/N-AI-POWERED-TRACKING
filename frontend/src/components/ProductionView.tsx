@@ -62,8 +62,8 @@ export const ProductionView: React.FC<ProductionViewProps> = ({
 
   const filteredBatches = batches.filter((b) => {
     const matchesSearch =
-      b.batch_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (b.product_name && b.product_name.toLowerCase().includes(searchTerm.toLowerCase()));
+      String(b?.batch_number || '').toLowerCase().includes(String(searchTerm || '').toLowerCase()) ||
+      String(b?.product_name || '').toLowerCase().includes(String(searchTerm || '').toLowerCase());
     const matchesStatus = statusFilter === 'ALL' || b.status === statusFilter;
     return matchesSearch && matchesStatus;
   });

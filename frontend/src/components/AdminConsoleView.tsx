@@ -386,7 +386,7 @@ export const AdminConsoleView: React.FC<AdminConsoleViewProps> = ({
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {usersList
-                  .filter(u => u.full_name.toLowerCase().includes(searchTerm.toLowerCase()) || u.email.toLowerCase().includes(searchTerm.toLowerCase()))
+                  .filter(u => String(u?.full_name || '').toLowerCase().includes(String(searchTerm || '').toLowerCase()) || String(u?.email || '').toLowerCase().includes(String(searchTerm || '').toLowerCase()))
                   .map((user) => (
                     <tr key={user.id} className="hover:bg-slate-50/80 transition">
                       <td className="px-5 py-3.5">
