@@ -614,3 +614,103 @@ export const DEMO_USERS: Record<string, any> = {
     company_name: "BeverageTrack AI Platform Authority"
   }
 };
+
+export interface WaterLot {
+  id: string;
+  lot_number: string;
+  source_name: string;
+  source_type: 'borehole_1' | 'borehole_2' | 'guma_reservoir';
+  volume_liters: number;
+  tds_ppm: number;
+  ph_level: number;
+  turbidity_ntu: number;
+  conductivity_us: number;
+  treatment_status: 'raw_intake' | 'ro_purifying' | 'lab_approved' | 'transferred_to_production';
+  ro_stage: string;
+  coliform_count: number;
+  chlorine_residual_ppm: number;
+  intake_timestamp: string;
+  engineer_name: string;
+  assigned_production_line?: string;
+  target_batch_id?: string;
+  notes?: string;
+}
+
+export const INITIAL_WATER_LOTS: WaterLot[] = [
+  {
+    id: "wlot-001",
+    lot_number: "RW-2026-001",
+    source_name: "Borehole Aquifer 1 (Kissy Deep Artesian Well)",
+    source_type: "borehole_1",
+    volume_liters: 50000,
+    tds_ppm: 112,
+    ph_level: 7.15,
+    turbidity_ntu: 0.12,
+    conductivity_us: 180,
+    treatment_status: "transferred_to_production",
+    ro_stage: "RO Membrane 3-Pass + UV Sanitized",
+    coliform_count: 0,
+    chlorine_residual_ppm: 0.02,
+    intake_timestamp: "2026-11-15T06:30:00Z",
+    engineer_name: "Samuel Kamara (Lead Water Treatment Engineer)",
+    assigned_production_line: "Line 1 - High-Speed Bottling (PET)",
+    target_batch_id: "batch-001",
+    notes: "Aquifer recharge stable. Pre-filtration sand bed backwashed."
+  },
+  {
+    id: "wlot-002",
+    lot_number: "RW-2026-002",
+    source_name: "Borehole Aquifer 2 (Wellington Industrial Zone)",
+    source_type: "borehole_2",
+    volume_liters: 45000,
+    tds_ppm: 128,
+    ph_level: 7.22,
+    turbidity_ntu: 0.15,
+    conductivity_us: 210,
+    treatment_status: "transferred_to_production",
+    ro_stage: "RO Membrane + Carbon Bed Dechlorinated",
+    coliform_count: 0,
+    chlorine_residual_ppm: 0.01,
+    intake_timestamp: "2026-11-15T14:15:00Z",
+    engineer_name: "Aminata Sesay (Water Quality Analyst)",
+    assigned_production_line: "Line 2 - Carbonated & Glass Line",
+    target_batch_id: "batch-002",
+    notes: "High mineral equilibrium. Passed SLSB CS-022 drinking water baseline."
+  },
+  {
+    id: "wlot-003",
+    lot_number: "RW-2026-003",
+    source_name: "Borehole Aquifer 1 (Kissy Deep Artesian Well)",
+    source_type: "borehole_1",
+    volume_liters: 60000,
+    tds_ppm: 110,
+    ph_level: 7.08,
+    turbidity_ntu: 0.11,
+    conductivity_us: 175,
+    treatment_status: "lab_approved",
+    ro_stage: "RO Final Stage - Permeate Reservoir B (Sterile)",
+    coliform_count: 0,
+    chlorine_residual_ppm: 0.02,
+    intake_timestamp: "2026-11-17T07:00:00Z",
+    engineer_name: "Samuel Kamara (Lead Water Treatment Engineer)",
+    notes: "Approved by QC laboratory. Ready for immediate release to Bottling Line 1."
+  },
+  {
+    id: "wlot-004",
+    lot_number: "RW-2026-004",
+    source_name: "Guma Valley Municipal Intake (Kongo Dam Intake)",
+    source_type: "guma_reservoir",
+    volume_liters: 35000,
+    tds_ppm: 145,
+    ph_level: 6.90,
+    turbidity_ntu: 0.28,
+    conductivity_us: 235,
+    treatment_status: "ro_purifying",
+    ro_stage: "Active Reverse Osmosis Filtration & Flocculation",
+    coliform_count: 0,
+    chlorine_residual_ppm: 0.05,
+    intake_timestamp: "2026-11-18T09:45:00Z",
+    engineer_name: "Aminata Sesay (Water Quality Analyst)",
+    notes: "Under multi-media carbon absorption and RO membrane cycle."
+  }
+];

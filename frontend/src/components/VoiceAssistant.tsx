@@ -74,7 +74,8 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
   }, [hoverReadMode, language]);
 
   const translateToKrioSnippet = (text: string): string => {
-    const lower = text.toLowerCase();
+    if (!text || typeof text !== 'string') return '';
+    const lower = String(text).toLowerCase();
     if (lower.includes('sign out') || lower.includes('logout')) return 'Lock out en go bak na login';
     if (lower.includes('credentials')) return 'Luk all di staff credential dem';
     if (lower.includes('settings') || lower.includes('profile')) return 'Change yu profile en password';

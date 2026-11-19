@@ -17,6 +17,8 @@ import { SettingsModal } from './components/SettingsModal';
 import { CredentialsDirectoryModal } from './components/CredentialsDirectoryModal';
 import { AdminConsoleView } from './components/AdminConsoleView';
 import { ProcessStepsModal } from './components/ProcessStepsModal';
+import { WaterIntakeView } from './components/WaterIntakeView';
+import { AIVoiceCommander } from './components/AIVoiceCommander';
 import {
   Factory,
   ShieldCheck,
@@ -45,10 +47,12 @@ export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [loading, setLoading] = useState<boolean>(true);
   const [showMobileScanner, setShowMobileScanner] = useState<boolean>(false);
+  const [showUniversalScanner, setShowUniversalScanner] = useState<boolean>(false);
 
   // App data state
   const [overview, setOverview] = useState<any>(null);
   const [trends, setTrends] = useState<any[]>([]);
+  const [waterLots, setWaterLots] = useState<any[]>([]);
   const [batches, setBatches] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [lines, setLines] = useState<any[]>([]);
@@ -104,6 +108,7 @@ export const App: React.FC = () => {
       const [
         ov,
         tr,
+        wl,
         bt,
         pr,
         ln,
@@ -120,6 +125,7 @@ export const App: React.FC = () => {
       ] = await Promise.all([
         api.getDashboardOverview().catch(() => null),
         api.getProductionTrends().then(res => res.trends).catch(() => []),
+        api.getWaterLots().catch(() => []),
         api.getBatches().catch(() => []),
         api.getProducts().catch(() => []),
         api.getProductionLines().catch(() => []),
@@ -137,6 +143,7 @@ export const App: React.FC = () => {
 
       setOverview(ov);
       setTrends(tr || []);
+      setWaterLots(wl || []);
       setBatches(bt || []);
       setProducts(pr || []);
       setLines(ln || []);
@@ -201,6 +208,17 @@ export const App: React.FC = () => {
   };
 
   // Actions passed to child components
+  const handleCreateWaterLot = async (lotData: any) => {
+    await api.createWaterLot(lotData);
+    await loadAllData();
+  };
+
+  const handleSendWaterToProduction = async (lotId: string, data: any) => {
+    const res = await api.sendWaterToProduction(lotId, data);
+    await loadAllData();
+    return res;
+  };
+
   const handleCreateBatch = async (batchData: any) => {
     await api.createBatch(batchData);
     await loadAllData();
@@ -585,6 +603,7 @@ export const App: React.FC = () => {
         onLogout={handleLogout}
         onOpenSettings={() => setIsSettingsOpen(true)}
         onOpenProcessSteps={() => setIsProcessStepsOpen(true)}
+        onOpenScanner={() => setShowUniversalScanner(true)}
       />
 
       {/* Main Content Area */}
@@ -597,6 +616,7 @@ export const App: React.FC = () => {
           onOpenSettings={() => setIsSettingsOpen(true)}
           onOpenCredentials={() => setIsCredentialsOpen(true)}
           onOpenProcessSteps={() => setIsProcessStepsOpen(true)}
+          onOpenScanner={() => setShowUniversalScanner(true)}
           kpis={overview?.kpis}
         />
 
@@ -610,14 +630,26 @@ export const App: React.FC = () => {
             />
           )}
 
+          {activeTab === 'water' && (
+            <WaterIntakeView
+              waterLots={waterLots}
+              productionLines={lines}
+              onCreateWaterLot={handleCreateWaterLot}
+              onSendToProduction={handleSendWaterToProduction}
+              onNavigateToProduction={() => setActiveTab('production')}
+            />
+          )}
+
           {activeTab === 'production' && (
             <ProductionView
               batches={batches}
               products={products}
               lines={lines}
+              waterLots={waterLots}
               onCreateBatch={handleCreateBatch}
               onSelectBatchForTracking={handleSelectBatchForTracking}
               onOpenQR={handleOpenQR}
+              onOpenScanner={() => setShowUniversalScanner(true)}
             />
           )}
 
@@ -773,6 +805,33 @@ export const App: React.FC = () => {
         isOpen={isProcessStepsOpen}
         onClose={() => setIsProcessStepsOpen(false)}
         onNavigateTab={(tab) => setActiveTab(tab)}
+      />
+
+      {/* Universal Mobile Camera QR Scanner Online Modal */}
+      {showUniversalScanner && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
+          <div className="relative max-w-xl w-full my-auto">
+            <MobileQRScanner
+              onClose={() => setShowUniversalScanner(false)}
+              onAdminLogin={() => {
+                setShowUniversalScanner(false);
+                handleQuickLogin('admin@sierrasprings.sl');
+              }}
+              onStaffLogin={(email) => {
+                setShowUniversalScanner(false);
+                handleQuickLogin(email);
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* AI Voice Command Overlay HUD (Voice Controlled Navigation & Logout) */}
+      <AIVoiceCommander
+        onNavigate={(tab) => setActiveTab(tab)}
+        onLogout={handleLogout}
+        onOpenScanner={() => setShowUniversalScanner(true)}
+        activeTab={activeTab}
       />
     </div>
   );

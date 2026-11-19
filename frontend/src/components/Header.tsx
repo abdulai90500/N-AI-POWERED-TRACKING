@@ -1,6 +1,6 @@
 import React from 'react';
 import { User, api } from '../services/api';
-import { Bell, ShieldCheck, Factory, LogOut, ChevronDown, Radio, Settings, KeyRound } from 'lucide-react';
+import { Bell, ShieldCheck, Factory, LogOut, ChevronDown, Radio, Settings, KeyRound, Camera, Droplets } from 'lucide-react';
 import { VoiceAssistant } from './VoiceAssistant';
 
 interface HeaderProps {
@@ -11,6 +11,7 @@ interface HeaderProps {
   onOpenSettings?: () => void;
   onOpenCredentials?: () => void;
   onOpenProcessSteps?: () => void;
+  onOpenScanner?: () => void;
   kpis?: any;
 }
 
@@ -22,6 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSettings,
   onOpenCredentials,
   onOpenProcessSteps,
+  onOpenScanner,
   kpis,
 }) => {
   const roles = [
@@ -36,6 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
   const getTitle = () => {
     switch (activeTab) {
       case 'dashboard': return 'Executive Management Dashboard';
+      case 'water': return 'Water Intake, Borehole Sourcing & Reverse Osmosis Plant';
       case 'production': return 'Production & Batch Management';
       case 'quality': return 'Quality Assurance & Inspection';
       case 'ai': return 'AI Quality & Anomaly Intelligence Hub';
@@ -78,6 +81,19 @@ export const Header: React.FC<HeaderProps> = ({
           currentUserRole={currentUser?.role}
           kpis={kpis}
         />
+
+        {/* Online Mobile QR Scanner Button */}
+        {onOpenScanner && (
+          <button
+            type="button"
+            onClick={onOpenScanner}
+            className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition flex items-center gap-1.5 shadow-xs border border-emerald-200"
+            title="Open online mobile camera QR scanner"
+          >
+            <Camera className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="hidden sm:inline">Online Scanner</span>
+          </button>
+        )}
 
         {/* Factory Process Steps Flow Button */}
         {onOpenProcessSteps && (

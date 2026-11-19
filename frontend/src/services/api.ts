@@ -9,6 +9,8 @@ import {
   INITIAL_ORDERS,
   INITIAL_DELIVERIES,
   INITIAL_MOVEMENTS,
+  INITIAL_WATER_LOTS,
+  WaterLot,
   DEMO_USERS
 } from './mockData';
 
@@ -60,6 +62,7 @@ class ApiService {
     orders: any[];
     deliveries: any[];
     products: any[];
+    waterLots: any[];
   };
 
   constructor() {
@@ -72,6 +75,7 @@ class ApiService {
       orders: [...INITIAL_ORDERS],
       deliveries: [...INITIAL_DELIVERIES],
       products: [...INITIAL_PRODUCTS],
+      waterLots: [...INITIAL_WATER_LOTS],
     };
   }
 
@@ -226,6 +230,83 @@ class ApiService {
           { date: '2026-11-16', produced: 37720, target: 38000, pass_rate: 66.7 },
           { date: '2026-11-17', produced: 11950, target: 12000, pass_rate: 99.5 },
         ]
+      } as unknown as T;
+    }
+
+    // Water Sourcing & Intake (Step 1 of Bottling)
+    if (endpoint.startsWith('/water/lots') && method === 'GET') {
+      return this.memoryStore.waterLots as unknown as T;
+    }
+
+    if (endpoint === '/water/lots' && method === 'POST') {
+      const newLot: WaterLot = {
+        id: `wlot-${Date.now()}`,
+        lot_number: body.lot_number || `RW-2026-00${this.memoryStore.waterLots.length + 1}`,
+        source_name: body.source_name || 'Borehole Aquifer 1 (Kissy Deep Artesian Well)',
+        source_type: body.source_type || 'borehole_1',
+        volume_liters: Number(body.volume_liters) || 50000,
+        tds_ppm: Number(body.tds_ppm) || 115,
+        ph_level: Number(body.ph_level) || 7.15,
+        turbidity_ntu: Number(body.turbidity_ntu) || 0.14,
+        conductivity_us: Number(body.conductivity_us) || 185,
+        treatment_status: body.treatment_status || 'lab_approved',
+        ro_stage: body.ro_stage || 'RO Membrane 3-Pass + UV Sanitized',
+        coliform_count: 0,
+        chlorine_residual_ppm: Number(body.chlorine_residual_ppm) || 0.02,
+        intake_timestamp: new Date().toISOString(),
+        engineer_name: body.engineer_name || 'Samuel Kamara (Lead Water Treatment Engineer)',
+        notes: body.notes || 'Intake logged and passed reverse osmosis pre-testing.'
+      };
+      this.memoryStore.waterLots.unshift(newLot);
+      return newLot as unknown as T;
+    }
+
+    if (endpoint.includes('/transfer-to-production') && method === 'POST') {
+      const parts = endpoint.split('/');
+      const lotId = parts[parts.indexOf('lots') + 1];
+      const lot = this.memoryStore.waterLots.find(w => w.id === lotId);
+      
+      const targetLine = body.production_line_name || INITIAL_LINES[0].name;
+      const plannedQty = Number(body.planned_quantity) || (lot ? Math.floor(lot.volume_liters * 1.95) : 25000);
+      const product = this.memoryStore.products[0];
+
+      // Auto-create connected production batch
+      const newBatchNumber = `BTL-2026-00${this.memoryStore.batches.length + 1}`;
+      const newBatch = {
+        id: `batch-${Date.now()}`,
+        batch_number: newBatchNumber,
+        product_id: product.id,
+        product_name: product.name,
+        product_sku: product.sku,
+        production_line_id: body.production_line_id || INITIAL_LINES[0].id,
+        production_line_name: targetLine,
+        line_name: targetLine,
+        planned_quantity: plannedQty,
+        produced_quantity: plannedQty,
+        quantity_produced: plannedQty,
+        available_stock: plannedQty,
+        status: 'in_production',
+        production_date: new Date().toISOString().split('T')[0],
+        manufacturing_date: new Date().toISOString(),
+        expiry_date: new Date(Date.now() + 365*24*60*60*1000).toISOString(),
+        qr_token: `track_btl_${newBatchNumber.toLowerCase().replace(/-/g, '_')}`,
+        notes: `Batch initiated from Water Lot ${lot ? lot.lot_number : 'RW-INTAKE'} (${lot ? lot.source_name : 'Borehole'})`,
+        source_water_lot: lot ? lot.lot_number : 'RW-INTAKE',
+        ai_risk_level: 'low',
+        ai_anomaly_score: 0.04
+      };
+
+      if (lot) {
+        lot.treatment_status = 'transferred_to_production';
+        lot.assigned_production_line = targetLine;
+        lot.target_batch_id = newBatch.id;
+      }
+
+      this.memoryStore.batches.unshift(newBatch);
+      return {
+        message: `Water Lot ${lot?.lot_number} successfully released and transferred to ${targetLine}! Production batch ${newBatchNumber} is now live.`,
+        water_lot: lot,
+        batch: newBatch
       } as unknown as T;
     }
 
@@ -502,6 +583,25 @@ class ApiService {
 
   async getProductionTrends(): Promise<any> {
     return this.request('/dashboard/production-trends');
+  }
+
+  // Water Sourcing & Intake (Step 1)
+  async getWaterLots(): Promise<WaterLot[]> {
+    return this.request('/water/lots');
+  }
+
+  async createWaterLot(lotData: any): Promise<WaterLot> {
+    return this.request('/water/lots', {
+      method: 'POST',
+      body: JSON.stringify(lotData),
+    });
+  }
+
+  async sendWaterToProduction(waterLotId: string, data: any = {}): Promise<any> {
+    return this.request(`/water/lots/${waterLotId}/transfer-to-production`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   }
 
   // Production

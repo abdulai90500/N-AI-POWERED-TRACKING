@@ -13,7 +13,9 @@ import {
   Sparkles,
   LogOut,
   ShieldAlert,
-  Settings
+  Settings,
+  Droplets,
+  Camera
 } from 'lucide-react';
 import { User } from '../services/api';
 
@@ -25,6 +27,7 @@ interface SidebarProps {
   onLogout?: () => void;
   onOpenSettings?: () => void;
   onOpenProcessSteps?: () => void;
+  onOpenScanner?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -35,9 +38,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onLogout,
   onOpenSettings,
   onOpenProcessSteps,
+  onOpenScanner,
 }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'water', label: 'Water Intake & RO', icon: Droplets, highlight: true },
     { id: 'production', label: 'Production', icon: Factory },
     { id: 'quality', label: 'Quality Control', icon: CheckCircle2, badge: unreadAlertsCount > 0 ? 'Alert' : undefined },
     { id: 'ai', label: 'AI Quality Hub', icon: BrainCircuit, highlight: true },
@@ -82,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             Core Operations
           </p>
           <div className="space-y-1">
-            {menuItems.slice(0, 4).map((item) => {
+            {menuItems.slice(0, 5).map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               return (
@@ -119,7 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             Logistics & Traceability
           </p>
           <div className="space-y-1">
-            {menuItems.slice(4, 8).map((item) => {
+            {menuItems.slice(5, 9).map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               return (
@@ -148,7 +153,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             Governance & Audits
           </p>
           <div className="space-y-1">
-            {menuItems.slice(8).map((item) => {
+            {menuItems.slice(9).map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               return (
@@ -201,6 +206,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <Factory className="w-3 h-3 text-sky-400" />
               <span>View Factory Steps (1-8)</span>
+            </button>
+          )}
+
+          {onOpenScanner && (
+            <button
+              type="button"
+              onClick={onOpenScanner}
+              className="w-full mt-1.5 py-1.5 px-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800/80 font-bold text-[10px] transition flex items-center justify-center gap-1.5"
+            >
+              <Camera className="w-3 h-3 text-emerald-400" />
+              <span>Online Mobile Scanner</span>
             </button>
           )}
         </div>

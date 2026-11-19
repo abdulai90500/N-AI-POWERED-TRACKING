@@ -44,7 +44,7 @@ export const ProcessStepsModal: React.FC<ProcessStepsModalProps> = ({
       tag: "Intake & Purification",
       location: "Kissy Facility Borehole & RO Manifold",
       officer: "Water Treatment Technicians",
-      targetTab: "quality",
+      targetTab: "water",
       keyMetrics: [
         { label: "Filtration Stages", value: "4-Stage Quartz + GAC + RO" },
         { label: "Baseline pH", value: "6.95 - 7.15 pH" },
