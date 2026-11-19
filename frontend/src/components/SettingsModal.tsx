@@ -31,7 +31,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [activeTab, setActiveTab] = useState<'profile' | 'password'>('profile');
 
   // Profile Form State
-  const [fullName, setFullName] = useState(currentUser?.full_name || 'Mariama Sesay');
+  const [fullName, setFullName] = useState(currentUser?.full_name || 'Umu Shaw & Team');
   const [email, setEmail] = useState(currentUser?.email || 'admin@sierrasprings.sl');
   const [phoneNumber, setPhoneNumber] = useState('+232 76 123456');
   const [department, setDepartment] = useState('Executive Management & Quality Ops');

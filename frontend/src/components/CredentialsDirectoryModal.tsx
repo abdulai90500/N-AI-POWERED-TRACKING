@@ -28,13 +28,13 @@ export const CredentialsDirectoryModal: React.FC<CredentialsDirectoryModalProps>
 
   const usersList = [
     {
-      name: 'Mariama Sesay',
-      role: 'Company Administrator',
+      name: 'Umu Shaw & Team',
+      role: 'Dissertation Lead & Company Administrator',
       email: 'admin@sierrasprings.sl',
-      password: 'Password123!',
+      password: 'UmuShawTeam2026!',
       badge: 'STAFF-ADMIN-001',
-      desc: 'Full factory governance, staff roster, batch release/abort, SLSB compliance',
-      tag: 'Admin & Operations'
+      desc: 'Lead Researcher & Administrator. Factory governance, staff roster, batch release/abort, SLSB compliance',
+      tag: 'Dissertation Lead'
     },
     {
       name: 'Fatmata Bangura',
@@ -111,21 +111,31 @@ export const CredentialsDirectoryModal: React.FC<CredentialsDirectoryModalProps>
           </button>
         </div>
 
-        {/* Global Password Notice Banner */}
-        <div className="bg-sky-50 border-b border-sky-100 px-5 py-2.5 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2 text-sky-900">
-            <span className="font-bold">Universal Demo Password:</span>
-            <code className="font-mono bg-white px-2 py-0.5 rounded border border-sky-200 font-extrabold text-sky-700">
-              Password123!
-            </code>
+        {/* Academic Dissertation & Password Notice Banner */}
+        <div className="bg-gradient-to-r from-sky-50 via-indigo-50 to-sky-50 border-b border-sky-100 px-5 py-3 text-xs">
+          <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-600 text-white font-extrabold text-[10px]">
+              🎓 Academic Dissertation Research
+            </span>
+            <span className="text-[11px] font-bold text-slate-700">Project Authors: <strong className="text-sky-800">Umu Shaw &amp; Team</strong></span>
           </div>
-          <button
-            onClick={() => handleCopy('Password123!')}
-            className="text-[11px] font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1"
-          >
-            {copiedEmail === 'Password123!' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedEmail === 'Password123!' ? 'Copied' : 'Copy Password'}</span>
-          </button>
+
+          <div className="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-sky-200/60">
+            <div className="flex items-center gap-2 text-sky-900 flex-wrap">
+              <span className="font-bold">Dissertation Demo Password:</span>
+              <code className="font-mono bg-white px-2 py-0.5 rounded border border-sky-200 font-extrabold text-sky-700">
+                UmuShawTeam2026!
+              </code>
+              <span className="text-[10px] text-slate-500">(or Password123!)</span>
+            </div>
+            <button
+              onClick={() => handleCopy('UmuShawTeam2026!')}
+              className="text-[11px] font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1"
+            >
+              {copiedEmail === 'UmuShawTeam2026!' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedEmail === 'UmuShawTeam2026!' ? 'Copied' : 'Copy Password'}</span>
+            </button>
+          </div>
         </div>
 
         {/* Staff Roster Cards */}

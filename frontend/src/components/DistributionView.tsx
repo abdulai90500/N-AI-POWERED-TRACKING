@@ -87,15 +87,13 @@ export const DistributionView: React.FC<DistributionViewProps> = ({
   };
 
   const handleMarkDelivered = async (deliveryId: string) => {
-    if (confirm('Confirm product delivery to distributor?')) {
-      try {
-        await onUpdateDeliveryStatus(deliveryId, {
-          delivery_status: 'delivered',
-          proof_notes: 'Delivered in full. Signed by store receiving clerk.'
-        });
-      } catch (err: any) {
-        alert(err.message);
-      }
+    try {
+      await onUpdateDeliveryStatus(deliveryId, {
+        delivery_status: 'delivered',
+        proof_notes: 'Delivered in full. Signed by store receiving clerk.'
+      });
+    } catch (err: any) {
+      alert(`Error updating delivery: ${err.message}`);
     }
   };
 

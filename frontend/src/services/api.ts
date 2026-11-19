@@ -148,7 +148,7 @@ class ApiService {
       const user = DEMO_USERS[email] || {
         id: 'user-guest',
         email: email,
-        full_name: 'Factory Supervisor',
+        full_name: 'Umu Shaw & Team',
         role: 'Company Administrator',
         company_id: 'comp-001',
         company_name: 'Sierra Springs & Beverages Ltd'
@@ -498,8 +498,66 @@ class ApiService {
 
     // Distribution
     if (endpoint === '/distribution/customers') return INITIAL_CUSTOMERS as unknown as T;
-    if (endpoint === '/distribution/orders') return this.memoryStore.orders as unknown as T;
-    if (endpoint === '/distribution/deliveries') return this.memoryStore.deliveries as unknown as T;
+    if (endpoint === '/distribution/orders' && method === 'GET') return this.memoryStore.orders as unknown as T;
+    if (endpoint === '/distribution/orders' && method === 'POST') {
+      const newOrder = {
+        id: `ord-${Date.now()}`,
+        order_number: body.order_number || `ORD-2026-${100 + this.memoryStore.orders.length + 1}`,
+        customer_name: body.customer_name || 'Choithram Supermarket',
+        customer_tier: 'Key Account Distributor',
+        destination: body.destination || 'Freetown Urban Zone',
+        status: 'pending_dispatch',
+        order_date: new Date().toISOString().split('T')[0],
+        total_cases: Number(body.total_cases) || 200,
+        allocated_batch: this.memoryStore.batches[0]?.batch_number || 'BTL-2026-001',
+        total_amount_sll: Number(body.total_amount_sll) || 15000000
+      };
+      this.memoryStore.orders.unshift(newOrder);
+      return newOrder as unknown as T;
+    }
+
+    if (endpoint.startsWith('/distribution/deliveries') && method === 'GET') {
+      return this.memoryStore.deliveries as unknown as T;
+    }
+
+    if (endpoint.includes('/distribution/deliveries/') && method === 'PATCH') {
+      const parts = endpoint.split('/');
+      const deliveryId = parts[parts.length - 1];
+      const delivery = this.memoryStore.deliveries.find(d => d.id === deliveryId || d.delivery_number === deliveryId);
+      if (delivery) {
+        delivery.delivery_status = body.delivery_status || 'delivered';
+        delivery.status = body.delivery_status || 'delivered';
+        if (body.proof_notes) delivery.proof_notes = body.proof_notes;
+        delivery.delivered_at = new Date().toISOString();
+
+        // Update matching order status
+        const order = this.memoryStore.orders.find(o => o.id === delivery.order_id || o.order_number === delivery.order_number);
+        if (order && body.delivery_status === 'delivered') {
+          order.status = 'delivered';
+        }
+      }
+      return { message: 'Delivery status updated successfully.', delivery } as unknown as T;
+    }
+
+    if (endpoint === '/distribution/deliveries' && method === 'POST') {
+      const newDel = {
+        id: `del-${Date.now()}`,
+        delivery_number: `DEL-2026-00${this.memoryStore.deliveries.length + 1}`,
+        order_id: body.order_id || 'ord-001',
+        order_number: body.order_number || 'ORD-2026-101',
+        customer_name: body.customer_name || 'Choithram Supermarket',
+        destination: body.destination || 'Freetown Territory',
+        vehicle_reg: body.vehicle_reg || 'SL-AA-402 (Toyota Dyna)',
+        driver_name: body.driver_name || 'Samuel Koroma',
+        driver_phone: body.driver_phone || '+232 76 998877',
+        dispatched_at: new Date().toISOString(),
+        status: 'in_transit',
+        delivery_status: 'in_transit',
+        estimated_arrival: new Date(Date.now() + 2 * 3600 * 1000).toISOString()
+      };
+      this.memoryStore.deliveries.unshift(newDel);
+      return newDel as unknown as T;
+    }
 
     // Tracking
     if (endpoint.includes('/public/track/')) {

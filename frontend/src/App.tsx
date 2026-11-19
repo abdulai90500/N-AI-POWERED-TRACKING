@@ -79,7 +79,7 @@ export const App: React.FC = () => {
 
   // Login form state - preloaded with Admin as primary assigned role
   const [email, setEmail] = useState('admin@sierrasprings.sl');
-  const [password, setPassword] = useState('Password123!');
+  const [password, setPassword] = useState('UmuShawTeam2026!');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [roleSelection, setRoleSelection] = useState<string>('admin@sierrasprings.sl');
   const [loginTab, setLoginTab] = useState<'credentials' | 'badge_scan'>('credentials');
@@ -176,10 +176,10 @@ export const App: React.FC = () => {
 
   const handleQuickLogin = async (demoEmail: string) => {
     setEmail(demoEmail);
-    setPassword('Password123!');
+    setPassword('UmuShawTeam2026!');
     setLoginError(null);
     try {
-      const auth = await api.login(demoEmail, 'Password123!');
+      const auth = await api.login(demoEmail, 'UmuShawTeam2026!');
       setCurrentUser(auth.user);
       await loadAllData();
     } catch (err: any) {
@@ -369,6 +369,9 @@ export const App: React.FC = () => {
 
               {/* Title & Brand */}
               <div className="text-left mb-4">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-[10px] font-extrabold text-indigo-700 mb-2.5">
+                  🎓 Academic Dissertation Research Project by Umu Shaw &amp; Team
+                </div>
                 <div className="w-12 h-12 bg-gradient-to-tr from-sky-500 to-brand-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-sky-600/30 mb-2.5">
                   <Factory className="w-7 h-7" />
                 </div>
@@ -469,7 +472,7 @@ export const App: React.FC = () => {
                     <div className="text-left">
                       <div className="flex justify-between items-center mb-1">
                         <label className="text-xs font-bold text-slate-700">Security Password</label>
-                        <span className="text-[10px] text-slate-400">Default: Password123!</span>
+                        <span className="text-[10px] text-sky-700 font-bold">Dissertation Password: UmuShawTeam2026! (or Password123!)</span>
                       </div>
                       <div className="relative">
                         <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -525,7 +528,7 @@ export const App: React.FC = () => {
                     </p>
                     <div className="space-y-1.5">
                       {[
-                        { name: 'Mariama Sesay', role: 'Company Administrator', email: 'admin@sierrasprings.sl', badge: 'STAFF-ADMIN-001' },
+                        { name: 'Umu Shaw & Team', role: 'Company Administrator / Dissertation Lead', email: 'admin@sierrasprings.sl', badge: 'STAFF-ADMIN-001' },
                         { name: 'Fatmata Bangura', role: 'Quality Control Officer', email: 'quality@sierrasprings.sl', badge: 'STAFF-QC-002' },
                         { name: 'Ibrahim Kamara', role: 'Production Manager', email: 'production@sierrasprings.sl', badge: 'STAFF-PROD-003' },
                         { name: 'Mohamed Turay', role: 'Warehouse Manager', email: 'warehouse@sierrasprings.sl', badge: 'STAFF-WH-004' },

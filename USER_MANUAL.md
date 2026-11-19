@@ -19,7 +19,7 @@
    - [Phase 4: AI Quality Intelligence Hub](#phase-4-ai-quality-intelligence-hub)
    - [Phase 5: Warehouse & Inventory Control](#phase-5-warehouse--inventory-control-mohamed-turay)
    - [Phase 6: Fleet Distribution & Logistics](#phase-6-fleet-distribution--logistics-alhaji-conteh)
-   - [Phase 7: Administrative Governance & Batch Abort](#phase-7-administrative-governance--batch-abort-mariama-sesay)
+   - [Phase 7: Administrative Governance & Batch Abort](#phase-7-administrative-governance--batch-abort-umu-shaw--team)
    - [Phase 8: Consumer & Retail QR Verification](#phase-8-consumer--retail-qr-verification)
 5. [Special System Features](#5-special-system-features)
    - [AI Audio Voice Assistant (Salone Krio & English)](#ai-audio-voice-assistant-salone-krio--english)
@@ -62,18 +62,18 @@ The login screen features a split layout:
 2. **1-Click Quick Autofill:**  
    Tap any of the role badges above the form (`👑 Admin`, `🔬 QC Lead`, `🏭 Production`, `📦 Warehouse`, `🚚 Fleet Driver`, `🌐 Super Admin`). The system fills the credentials instantly.
 3. **Staff ID Badge Scan (Contactless):**  
-   Click the **"Scan Badge to Login"** tab and tap your digital ID badge card (e.g. *Mariama Sesay — STAFF-ADMIN-001*). The system authenticates your role in 300ms.
+   Click the **"Scan Badge to Login"** tab and tap your digital ID badge card (e.g. *Umu Shaw & Team — STAFF-ADMIN-001*). The system authenticates your role in 300ms.
 
 ---
 
 ## 3. Master User Credentials Directory
 
 > [!IMPORTANT]
-> All pre-configured demo and testing accounts use the universal password: **`Password123!`**
+> All pre-configured demo and testing accounts use the universal dissertation password: **`UmuShawTeam2026!`** (or `Password123!`).
 
 | Staff Member | Assigned Role | Work Email Address | Staff Badge ID | Department & Scope |
 | :--- | :--- | :--- | :--- | :--- |
-| **Mariama Sesay** | **Company Administrator** *(Default)* | `admin@sierrasprings.sl` | `STAFF-ADMIN-001` | Executive governance, staff roster, batch aborts, SLSB oversight |
+| **Umu Shaw & Team** | **Company Administrator & Dissertation Lead** *(Default)* | `admin@sierrasprings.sl` | `STAFF-ADMIN-001` | Executive governance, staff roster, batch aborts, SLSB oversight |
 | **Fatmata Bangura** | **Quality Control Lead** | `quality@sierrasprings.sl` | `STAFF-QC-002` | Laboratory inspections, recording pH/volume/torque, batch release |
 | **Ibrahim Kamara** | **Production Manager** | `production@sierrasprings.sl` | `STAFF-PROD-003` | Factory floor oversight, batch registration, Line 1 & 2 bottling |
 | **Mohamed Turay** | **Warehouse Manager** | `warehouse@sierrasprings.sl` | `STAFF-WH-004` | Kissy Central Depot and Lumley hub inventory receipts & dispatch |
@@ -175,7 +175,7 @@ The login screen features a split layout:
 
 ---
 
-### Phase 7: Administrative Governance & Batch Abort (Mariama Sesay)
+### Phase 7: Administrative Governance & Batch Abort (Umu Shaw & Team)
 * **Goal:** Supervise staff users, monitor open incidents, and execute emergency recalls.
 * **Software Module:** `Admin Console` tab.
 * **Operating Instructions:**

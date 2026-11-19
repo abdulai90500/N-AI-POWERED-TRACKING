@@ -563,10 +563,21 @@ export const DEMO_USERS: Record<string, any> = {
     id: "user-001",
     badge_id: "STAFF-ADMIN-001",
     email: "admin@sierrasprings.sl",
-    full_name: "Mariama Sesay",
+    full_name: "Umu Shaw & Team",
     role: "Company Administrator",
     company_id: "comp-001",
-    company_name: "Sierra Springs & Beverages Ltd"
+    company_name: "Sierra Springs & Beverages Ltd",
+    academic_affiliation: "Dissertation Research Project - Freetown Bottling AI Core"
+  },
+  "umushaw@sierrasprings.sl": {
+    id: "user-001-lead",
+    badge_id: "STAFF-RESEARCH-001",
+    email: "umushaw@sierrasprings.sl",
+    full_name: "Umu Shaw & Team",
+    role: "Dissertation Lead Researcher & Administrator",
+    company_id: "comp-001",
+    company_name: "Sierra Springs & Beverages Ltd",
+    academic_affiliation: "Dissertation Research Project - Freetown Bottling AI Core"
   },
   "quality@sierrasprings.sl": {
     id: "user-002",

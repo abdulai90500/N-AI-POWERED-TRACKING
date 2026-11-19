@@ -38,7 +38,7 @@ export const MobileQRScanner: React.FC<MobileQRScannerProps> = ({ onClose, onAdm
   const streamRef = useRef<MediaStream | null>(null);
 
   const staffBadges = [
-    { name: 'Mariama Sesay', role: 'Company Administrator', email: 'admin@sierrasprings.sl', badge: 'STAFF-ADMIN-001' },
+    { name: 'Umu Shaw & Team', role: 'Company Administrator / Dissertation Lead', email: 'admin@sierrasprings.sl', badge: 'STAFF-ADMIN-001' },
     { name: 'Fatmata Bangura', role: 'Quality Control Officer', email: 'quality@sierrasprings.sl', badge: 'STAFF-QC-002' },
     { name: 'Ibrahim Kamara', role: 'Production Manager', email: 'production@sierrasprings.sl', badge: 'STAFF-PROD-003' },
     { name: 'Mohamed Turay', role: 'Warehouse Manager', email: 'warehouse@sierrasprings.sl', badge: 'STAFF-WH-004' },

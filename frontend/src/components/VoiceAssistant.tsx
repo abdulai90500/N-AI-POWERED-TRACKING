@@ -143,7 +143,7 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
         case 'public-track':
           return `Dis na di Public SLSB Verification Portal. Anybody wey buy bottle with smartphone fit scan am to see if na original Salone drink or fake product.`;
         case 'admin':
-          return `Dis na di Admin Governance Center. Mariama Sesay fit add new staff user, emergency-abort bad batch, or delete case record dem with full audit security.`;
+          return `Dis na di Admin Governance Center. Umu Shaw en in team fit add new staff user, emergency-abort bad batch, or delete case record dem with full audit security.`;
         case 'reports':
           return `Dis na di SLSB Compliance en Audit Reports. You fit print or download PDF document dem for Sierra Leone Standards Bureau inspection.`;
         default:

@@ -41,10 +41,10 @@ export const AdminConsoleView: React.FC<AdminConsoleViewProps> = ({
     {
       id: 'user-001',
       badge_id: 'STAFF-ADMIN-001',
-      full_name: 'Mariama Sesay',
+      full_name: 'Umu Shaw & Team',
       email: 'admin@sierrasprings.sl',
       role: 'Company Administrator',
-      department: 'Executive Management',
+      department: 'Dissertation Lead & Executive Management',
       status: 'active',
       created_at: '2026-01-10'
     },
@@ -145,7 +145,7 @@ export const AdminConsoleView: React.FC<AdminConsoleViewProps> = ({
       id: 'AUDIT-101',
       action: 'BATCH_QUARANTINED',
       target: 'Batch BTL-2026-003',
-      performed_by: 'Mariama Sesay (Administrator)',
+      performed_by: 'Umu Shaw & Team (Dissertation Lead)',
       details: 'Quarantine confirmed following AI high-risk anomaly alert.',
       timestamp: '2026-11-16 15:25'
     },
